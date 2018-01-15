@@ -21,8 +21,7 @@ const styles = theme => ({
   },
   media: {
     maxWidth: 200,
-    maxHeight: 200,
-    flex: 1
+    maxHeight: 200
   },
   tipus: {
     flex: 'auto'

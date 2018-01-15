@@ -3,11 +3,13 @@ import SearchInput, {createFilter} from 'react-search-input';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
+import { connect } from 'react-redux';
+
+import { echo } from '../actions/echo';
 import MediaCard from './MediaCard';
-import data from '../data/papersData.json';
 import categories from '../data/categories.json';
 
-const KEYS_TO_FILTERS = ['title', 'text'];
+const KEYS_TO_FILTERS = ['nom', 'text'];
 
 const styles = {
   searchBar: {
@@ -31,6 +33,10 @@ class SearchApp extends Component {
       anchorEl: null
     };
     this.searchUpdated = this.searchUpdated.bind(this);
+  }
+
+  componentDidMount() {
+      this.props.fetchList();
   }
 
   handleClick = event => {
@@ -81,7 +87,7 @@ class SearchApp extends Component {
           onClose={this.handleClose}
         >
           {categories.map(value => (
-            <div>
+            <div key={value.name}>
               { value.name ?
               <MenuItem onClick={event => this.handleMenuItemClick(event, value)}>
                 <ListItemIcon>
@@ -100,8 +106,15 @@ class SearchApp extends Component {
   }
 
   render () {
-    const categoryData = data.filter(createFilter(this.state.categoryTerm.name, ['category']));
-    const filteredEmails = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+    const { message } = this.props;
+    let filteredList = false;
+    if (message) {
+      const categoryData = message.filter(createFilter(this.state.categoryTerm.name, ['etiqueta.nom']));
+      filteredList = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+    } else {
+      filteredList = message;
+    }
+    console.log(this.props.favorites.includes(2));
 
     return (
       <div>
@@ -111,7 +124,10 @@ class SearchApp extends Component {
             <SearchInput className="search-input" onChange={this.searchUpdated} />
           </div>
         </div>
-        <MediaCard data={filteredEmails} />
+        {filteredList ? (
+          <MediaCard
+            data={filteredList}
+          />) : null}
       </div>
     );
   }
@@ -121,4 +137,11 @@ class SearchApp extends Component {
   }
 }
 
-export default SearchApp;
+
+const mapStateToProps = ({ echo, user}) => {
+  const { message } = echo;
+  const { favorites } = user;
+  return { message, favorites };
+};
+
+export default connect(mapStateToProps, { fetchList: echo })(SearchApp);

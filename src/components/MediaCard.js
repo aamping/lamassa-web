@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
@@ -12,16 +14,20 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Select from 'material-ui/Select';
 import { FormControl } from 'material-ui/Form';
+import { ListItemIcon } from 'material-ui/List';
+import StarRatingComponent from 'react-star-rating-component';
+import { addFavorites } from '../actions/userActions';
 
 const totalQuantitat = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const styles = theme => ({
   card: {
-    maxWidth: 400,
+    width: 400,
+    height: 300
   },
   media: {
-    maxWidth: 200,
-    maxHeight: 200
+    maxWidth: 300,
+    height: 150
   },
   tipus: {
     flex: 'auto'
@@ -51,21 +57,33 @@ const styles = theme => ({
   }
 });
 
+const url = 'https://lamassa.org';
+
 class MediaCard extends Component {
   state = {
     quantitat: 0,
     tipus: ' ',
   };
 
+  handleAddFavorites(itemPk) {
+    const { favorites } = this.props;
+    if (favorites.includes(itemPk)) {
+      const index = favorites.indexOf(itemPk);
+      favorites.splice(index, 1);
+    } else {
+      favorites.push(itemPk);
+    }
+    this.props.addFavorites({ favorites });
+  }
 
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
   };
-
+// <CardActions disableActionSpacing>
   render() {
-    const { classes, data } = this.props;
+    const { classes, data, favorites } = this.props;
     return (
       <Grid container
         alignItems={'center'}
@@ -74,32 +92,50 @@ class MediaCard extends Component {
         justify={'center'}
       >
       {data.map(value => (
-        <Grid item key={value}>
+        <Grid item key={value.nom}>
           <Card className={classes.card}>
             <CardHeader
+              style={{paddingBottom: 5}}
               action={
-                <CardActions disableActionSpacing>
-                  <IconButton aria-label="Add to favorites">
-                    <FavoriteIcon />
+                <div>
+                <div>
+                  <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
+                    <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#508a4c' } : {color: 'grey' }} />
                   </IconButton>
                   <IconButton aria-label="Share">
                     <ShareIcon />
                   </IconButton>
-                </CardActions>
+                  </div>
+                <div style={{ fontSize: 20 }}>
+                  <StarRatingComponent
+                    name="rate"
+                    editing={false}
+                    starCount={5}
+                    value={3}
+                  />
+                </div>
+                </div>
               }
-              title={<div className={classes.text}>{value.title}</div>}
+              title={
+                <div className={classes.text}>
+                  {value.nom}
+                  <ListItemIcon>
+                    <img style={{ marginLeft: 10 }} alt='' src={url+value.etiqueta.img} />
+                  </ListItemIcon>
+                </div>
+              }
               subheader={
                 <div style={{ display: 'flex' }}>
-                  <Typography type='button'><a className={classes.text} href="http://www.yahoo.com"> {value.productor}</a></Typography>
+                  <Typography type='button'><a className={classes.text} href="http://www.yahoo.com"> {value.productor.nom}</a></Typography>
                   <MessageIcon style={{ marginLeft: 10 }}/>
                 </div>
               }
             />
             <div className={classes.div}>
-              <img alt='' src={value.img} className={classes.media}/>
+              <img alt='' src={url+value.thumb} href={url + value.foto} className={classes.media}/>
               <CardContent>
                 <Typography>
-                  {value.text}
+                  {value.text_curt}
                 </Typography>
               </CardContent>
             </div>
@@ -112,7 +148,7 @@ class MediaCard extends Component {
                   className={classes.selectEmpty}
                 >
                   {totalQuantitat.map(value => (
-                    <option value={value}>{value}</option>
+                    <option key={value} value={value}>{value}</option>
                   ))}
                 </Select>
               </FormControl>
@@ -123,8 +159,8 @@ class MediaCard extends Component {
                   onChange={this.handleChange('tipus')}
                   className={classes.selectEmpty}
                 >
-                  {value.options.map(value => (
-                    <option value={value.preu}>{value.preu + ' - ' + value.tipus}</option>
+                  {value.formats.map(value => (
+                    <option key={value.preu} value={value.preu}>{value.preu + ' - ' + value.nom}</option>
                   ))}
                 </Select>
               </FormControl>
@@ -144,4 +180,13 @@ MediaCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MediaCard);
+const mapStateToProps = ({ user }) => {
+  return { favorites: user.favorites, ts: user.ts };
+}
+
+export default compose(
+  withStyles(styles, {
+    name: 'MediaCard',
+  }),
+  connect(mapStateToProps, { addFavorites }),
+)(MediaCard);

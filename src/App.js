@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import AppBarDrawer from './components/AppBarDrawer';
+import ListScreen from './containers/ListScreen';
 
 class App extends Component {
   render() {
     return (
       <div>
-        <AppBarDrawer />
+        <ListScreen />
       </div>
     );
   }

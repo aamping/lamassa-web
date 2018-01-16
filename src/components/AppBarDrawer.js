@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
@@ -83,21 +83,9 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
-  content: {
-    width: '100%',
-    flexGrow: 1,
-    backgroundColor: '#f7ecb5',
-    padding: 24,
-    height: 'calc(100% - 56px)',
-    marginTop: 56,
-    [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 64px)',
-      marginTop: 64,
-    },
-  },
 });
 
-class AppBarDrawer extends React.Component {
+class AppBarDrawer extends Component {
   state = {
     open: false,
   };
@@ -111,7 +99,7 @@ class AppBarDrawer extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, children } = this.props;
 
     return (
         <div className={classes.appFrame}>
@@ -149,9 +137,7 @@ class AppBarDrawer extends React.Component {
               <List className={classes.list}>{otherMailFolderListItems}</List>
             </div>
           </Drawer>
-          <main className={classes.content}>
-            <SearchApp />
-          </main>
+          {children}
         </div>
     );
   }

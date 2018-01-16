@@ -22,7 +22,7 @@ const totalQuantitat = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const styles = theme => ({
   card: {
-    width: 400,
+    width: 380,
     height: 300
   },
   media: {
@@ -100,7 +100,7 @@ class MediaCard extends Component {
                 <div>
                 <div>
                   <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
-                    <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#508a4c' } : {color: 'grey' }} />
+                    <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#f6a828' } : {color: 'grey' }} />
                   </IconButton>
                   <IconButton aria-label="Share">
                     <ShareIcon />

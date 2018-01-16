@@ -1,6 +1,6 @@
 
 const initialState = {
-  message: ""
+  message: []
 };
 
 export default (state = initialState, action) => {

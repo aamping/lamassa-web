@@ -107,14 +107,8 @@ class SearchApp extends Component {
 
   render () {
     const { message } = this.props;
-    let filteredList = false;
-    if (message) {
-      const categoryData = message.filter(createFilter(this.state.categoryTerm.name, ['etiqueta.nom']));
-      filteredList = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-    } else {
-      filteredList = message;
-    }
-    console.log(this.props.favorites.includes(2));
+    const categoryData = message.filter(createFilter(this.state.categoryTerm.name, ['etiqueta.nom']));
+    const filteredList = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
       <div>
@@ -124,10 +118,9 @@ class SearchApp extends Component {
             <SearchInput className="search-input" onChange={this.searchUpdated} />
           </div>
         </div>
-        {filteredList ? (
-          <MediaCard
+        <MediaCard
             data={filteredList}
-          />) : null}
+          />
       </div>
     );
   }
@@ -140,8 +133,7 @@ class SearchApp extends Component {
 
 const mapStateToProps = ({ echo, user}) => {
   const { message } = echo;
-  const { favorites } = user;
-  return { message, favorites };
+  return { message };
 };
 
 export default connect(mapStateToProps, { fetchList: echo })(SearchApp);

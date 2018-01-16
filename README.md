@@ -2,7 +2,7 @@
 ## Description
 LaMassa project is a website for the Cooperative (TODO). It is build with React and Redux and Python-Django for the BackEnd and API. It has additional implementations:
 - [Material-UI@Next V1.0.0](https://material-ui-next.com//) A modern design library with material design components.
-
+.
 (GIF of te APP Usage)
 
 Still not hosted online

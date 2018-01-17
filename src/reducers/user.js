@@ -2,7 +2,8 @@ import * as user from '../actions/userActions';
 
 const initialState = {
   favorites: [],
-  ts: 0
+  ts: 0,
+  open: false
 };
 
 export default (state = initialState, action) => {
@@ -12,6 +13,10 @@ export default (state = initialState, action) => {
       return { ...state,
         favorites: action.payload,
         ts: (new Date()).getTime()
+      };
+    case user.HANDLE_DRAWER:
+      return { ...state,
+        open: action.payload
       };
     default:
       return state;

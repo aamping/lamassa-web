@@ -14,6 +14,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 
 import * as reducers from '../reducers';
 import { userLogout } from '../actions/authActions';
+import { handleDrawer } from '../actions/userActions';
 import DrawerBar from './DrawerBar';
 
 const drawerWidth = 240;
@@ -58,7 +59,7 @@ const styles = theme => ({
   },
 });
 
-class AppBarDrawer extends Component {
+class AppBarTitle extends Component {
   state = {
     open: false,
     anchorEl: null
@@ -73,11 +74,11 @@ class AppBarDrawer extends Component {
   };
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    this.props.handleDrawer({ open: true });
   };
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
+    this.props.handleDrawer({ open: false });
   };
 
   handleLogout() {
@@ -90,14 +91,13 @@ class AppBarDrawer extends Component {
     const openProfileMenu = Boolean(anchorEl);
 
     return (
-        <div className={classes.appFrame}>
-          <AppBar className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
-            <Toolbar disableGutters={!this.state.open}>
+          <AppBar className={classNames(classes.appBar, this.props.open && classes.appBarShift)}>
+            <Toolbar disableGutters={!this.props.open}>
               <IconButton
                 color="contrast"
                 aria-label="open drawer"
                 onClick={this.handleDrawerOpen}
-                className={classNames(classes.menuButton, this.state.open && classes.hide)}
+                className={classNames(classes.menuButton, this.props.open && classes.hide)}
               >
                 <MenuIcon />
               </IconButton>
@@ -136,26 +136,21 @@ class AppBarDrawer extends Component {
               )}
             </Toolbar>
           </AppBar>
-          <DrawerBar
-            open={this.state.open}
-            handleDrawerClose={this.handleDrawerClose}
-          />
-          {children}
-        </div>
     );
   }
 }
 
-AppBarDrawer.propTypes = {
+AppBarTitle.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: reducers.isAuthenticated(state)
+  isAuthenticated: reducers.isAuthenticated(state),
+  open: state.user.open
 })
 
 export default compose(
-  withStyles(styles, { name: 'AppBarDrawer', withTheme: true }),
-  connect(mapStateToProps, { userLogout }),
-)(AppBarDrawer);
+  withStyles(styles, { name: 'AppBarTitle', withTheme: true }),
+  connect(mapStateToProps, { userLogout, handleDrawer }),
+)(AppBarTitle);

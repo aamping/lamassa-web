@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import AppBarDrawer from '../components/AppBarDrawer';
 import SearchApp from '../components/SearchApp';
 
 const styles = theme => ({
@@ -24,11 +23,9 @@ function ListScreen(props) {
   const { classes } = props;
   return(
     <div>
-      <AppBarDrawer>
       <main className={classes.content}>
         <SearchApp />
       </main>
-      </AppBarDrawer>
     </div>
   );
 }

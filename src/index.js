@@ -10,6 +10,7 @@ import PrivateRoute from './containers/PrivateRoute';
 import './index.css';
 import App from './App';
 import configureStore from './store'
+import AppBarTitle from './components/AppBarTitle';
 
 const history = createHistory();
 const store = configureStore(history);

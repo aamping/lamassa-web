@@ -5,7 +5,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import { connect } from 'react-redux';
 
-import { echo } from '../actions/echo';
+import { fetchList } from '../actions/apiActions';
 import MediaCard from './MediaCard';
 import categories from '../data/categories.json';
 
@@ -131,9 +131,9 @@ class SearchApp extends Component {
 }
 
 
-const mapStateToProps = ({ echo, user}) => {
-  const { message } = echo;
+const mapStateToProps = ({ api, user}) => {
+  const { message } = api;
   return { message };
 };
 
-export default connect(mapStateToProps, { fetchList: echo })(SearchApp);
+export default connect(mapStateToProps, { fetchList })(SearchApp);

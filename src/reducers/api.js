@@ -1,4 +1,4 @@
-import * as echo from '../actions/echo';
+import * as api from '../actions/apiActions';
 
 const initialState = {
   message: []
@@ -7,7 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
   console.log(action);
   switch(action.type) {
-    case echo.ECHO_SUCCESS:
+    case api.FETCH_SUCCESS:
       return {
         message: action.payload
       };

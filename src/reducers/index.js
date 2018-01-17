@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import auth, * as fromAuth from './auth.js'
-import echo from './echo.js';
+import api from './api.js';
 import user from './user.js';
 
 export default combineReducers({
   router: routerReducer,
-  echo: echo,
+  api: api,
   user: user,
   auth: auth
 });

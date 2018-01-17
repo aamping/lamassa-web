@@ -7,7 +7,7 @@ const initialState = {
   errors: {},
 }
 
-export default (state=initialState, action) => {
+export default (state = initialState, action) => {
   switch(action.type) {
     case auth.LOGIN_SUCCESS:
       return {
@@ -38,6 +38,8 @@ export default (state=initialState, action) => {
              action.payload.response ||
                 {'non_field_errors': action.payload.statusText},
       }
+    case auth.LOGOUT:
+      return initialState;
     default:
       return state
     }

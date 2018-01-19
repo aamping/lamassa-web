@@ -15,7 +15,6 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import * as reducers from '../reducers';
 import { userLogout } from '../actions/authActions';
 import { handleDrawer } from '../actions/userActions';
-import DrawerBar from './DrawerBar';
 
 const drawerWidth = 240;
 
@@ -86,7 +85,7 @@ class AppBarTitle extends Component {
   }
 
   render() {
-    const { classes, children, isAuthenticated } = this.props;
+    const { classes, isAuthenticated } = this.props;
     const { anchorEl } = this.state;
     const openProfileMenu = Boolean(anchorEl);
 

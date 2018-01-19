@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import MailIcon from 'material-ui-icons/Mail';
 import ShoppingCartIcon from 'material-ui-icons/ShoppingCart';
@@ -10,26 +11,32 @@ import Badge from 'material-ui/Badge';
 
 export const mailFolderListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <FavoriteIcon />
-      </ListItemIcon>
-      <ListItemText primary="Favorite" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <Badge badgeContent={'?'} color="primary">
-          <ShoppingCartIcon />
-        </Badge>
-      </ListItemIcon>
-      <ListItemText primary="Cart" />
-    </ListItem>
+    <Link to="/">
+      <ListItem button>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItem>
+    </Link>
+    <Link to="/preferits">
+      <ListItem button>
+        <ListItemIcon>
+          <FavoriteIcon />
+        </ListItemIcon>
+        <ListItemText primary="Favorite" />
+      </ListItem>
+    </Link>
+    <Link to="/cart">
+      <ListItem button>
+        <ListItemIcon>
+          <Badge badgeContent={'?'} color="primary">
+            <ShoppingCartIcon />
+          </Badge>
+        </ListItemIcon>
+        <ListItemText primary="Cart" />
+      </ListItem>
+    </Link>
   </div>
 );
 

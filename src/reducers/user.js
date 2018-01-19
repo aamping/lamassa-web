@@ -3,7 +3,8 @@ import * as user from '../actions/userActions';
 const initialState = {
   favorites: [],
   ts: 0,
-  open: false
+  open: false,
+  cart: [],
 };
 
 export default (state = initialState, action) => {
@@ -12,6 +13,11 @@ export default (state = initialState, action) => {
     case user.ADD_FAVORITES:
       return { ...state,
         favorites: action.payload,
+        ts: (new Date()).getTime()
+      };
+    case user.ADD_CART:
+      return { ...state,
+        cart: action.payload,
         ts: (new Date()).getTime()
       };
     case user.HANDLE_DRAWER:

@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
-import SearchInput, {createFilter} from 'react-search-input';
+import SearchInput from 'react-search-input';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import { connect } from 'react-redux';
 
-import { fetchList } from '../actions/apiActions';
-import MediaCard from './MediaCard';
+import { fetchList, searchUpdated, categoryUpdated } from '../actions/apiActions';
 import categories from '../data/categories.json';
 
-const KEYS_TO_FILTERS = ['nom', 'text'];
 
 const styles = {
   searchBar: {
-    display: 'flex'
+    display: 'flex',
+    paddingLeft: 20,
   },
   search: {
     flex: 1
@@ -48,7 +47,8 @@ class SearchApp extends Component {
   };
 
   handleMenuItemClick = (event, value) => {
-    this.setState({ categoryTerm: value, anchorEl: null });
+    this.setState({ anchorEl: null });
+    this.props.categoryUpdated({ term: value.name });
   };
 
   renderButtonCategory(category) {
@@ -105,35 +105,29 @@ class SearchApp extends Component {
     );
   }
 
+  searchUpdated (term) {
+    this.props.searchUpdated({term});
+  }
+
   render () {
-    const { message } = this.props;
-    const categoryData = message.filter(createFilter(this.state.categoryTerm.name, ['etiqueta.nom']));
-    const filteredList = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+    // const categoryData = message.filter(createFilter(this.state.categoryTerm.name, ['etiqueta.nom']));
+    // const filteredList = categoryData.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
-      <div>
         <div style={styles.searchBar}>
           {this.renderMenuCategory(this.state.anchorEl)}
           <div style={styles.search}>
             <SearchInput className="search-input" onChange={this.searchUpdated} />
           </div>
         </div>
-        <MediaCard
-            data={filteredList}
-          />
-      </div>
     );
-  }
-
-  searchUpdated (term) {
-    this.setState({searchTerm: term});
   }
 }
 
 
 const mapStateToProps = ({ api, user}) => {
-  const { message } = api;
-  return { message };
+  const { filteredMessages } = api;
+  return { filteredMessages };
 };
 
-export default connect(mapStateToProps, { fetchList })(SearchApp);
+export default connect(mapStateToProps, { fetchList, searchUpdated, categoryUpdated })(SearchApp);

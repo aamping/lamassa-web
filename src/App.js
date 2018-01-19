@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import {Route, Switch} from 'react-router';
 import ListScreen from './containers/ListScreen';
 import AppBarTitle from './components/AppBarTitle';
-import DrawerBar from './components/DrawerBar';
+import PrivateRoute from './containers/PrivateRoute';
+import LoginScreen from './containers/LoginScreen';
 
 const styles = {
   appFrame: {
@@ -17,8 +19,10 @@ class App extends Component {
     return (
       <div style={styles.appFrame}>
         <AppBarTitle />
-        <DrawerBar />
-        <ListScreen />
+        <Switch>
+          <Route path="/login/" component={LoginScreen} />
+          <PrivateRoute path="/" component={ListScreen}/>
+        </Switch>
       </div>
     );
   }

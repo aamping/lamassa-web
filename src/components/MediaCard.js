@@ -18,6 +18,7 @@ import { ListItemIcon } from 'material-ui/List';
 import StarRatingComponent from 'react-star-rating-component';
 import { addFavorites } from '../actions/userActions';
 import { addToCart } from '../actions/userActions';
+import DialogForm from './DialogForm';
 
 const totalQuantitat = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -61,10 +62,18 @@ const styles = theme => ({
 const url = 'https://lamassa.org';
 
 class MediaCard extends Component {
-  state = {
-    quantitat: 0,
-    tipus: '',
-  };
+  componentWillMount() {
+    this.setState({
+      openDialogCart: [],
+      quantitat: 0,
+      tipus: -1,
+    });
+  }
+
+
+  handleDialogForm({ openDialogCart }) {
+    this.setState({ openDialogCart });
+  }
 
   handleAddFavorites(itemPk) {
     const { favorites } = this.props;
@@ -72,10 +81,11 @@ class MediaCard extends Component {
   }
 
   handleChange = name => event => {
+    console.log(event.target.value);
     this.setState({
       [name]: event.target.value,
     });
-  };
+  }
   handleCartButton(value) {
     const { tipus, quantitat } = this.state;
     const { cart } = this.props;
@@ -91,7 +101,7 @@ class MediaCard extends Component {
         direction={'row'}
         justify={'center'}
       >
-      {data.map(value => {
+      {data.map((value, index) => {
         if (!isFavorites || favorites.includes(value.pk)) {
           return (
             <Grid item key={value.nom}>
@@ -161,18 +171,38 @@ class MediaCard extends Component {
                       onChange={this.handleChange('tipus')}
                       className={classes.selectEmpty}
                     >
-                      {value.formats.map(value => (
-                        <option key={value.preu} value={value.preu}>{value.preu + ' € - ' + value.nom}</option>
+                      {value.formats.map((value, index) => (
+                        <option key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
                       ))}
                     </Select>
                   </FormControl>
                   <Button
                     raised
                     dense
-                    onClick={() => this.handleCartButton(value)}
+                    onClick={() => {
+                      const { openDialogCart } = this.state;
+                      openDialogCart[index] = true;
+                      this.handleDialogForm({ openDialogCart });
+                    }}
                     color="default">
                     <ShoppingCartIcon style={{ color: 'black' }} />
                   </Button>
+                  <DialogForm
+                    submitForm={this.props.addToCart}
+                    handleClose={() => {
+                      const { openDialogCart } = this.state;
+                      openDialogCart[index] = false;
+                      this.handleDialogForm({ openDialogCart });
+                    }}
+                    open={this.state.openDialogCart[index]}
+                    item={{
+                      ...value,
+                      selected: {
+                        quantitat: !this.state.quantitat ? 1 : this.state.quantitat,
+                        tipus: this.state.tipus === -1 ? value.formats[0]: value.formats[this.state.tipus],
+                      }
+                    }}
+                  />
                 </CardActions>
               </Card>
             </Grid>);

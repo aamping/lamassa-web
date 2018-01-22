@@ -6,13 +6,12 @@ import { withStyles } from 'material-ui/styles';
 import classNames from 'classnames';
 import Drawer from 'material-ui/Drawer';
 import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 
 import { handleDrawer } from '../actions/userActions';
-import { mailFolderListItems, otherMailFolderListItems } from './utils/drawerIcons';
+import DrawerIcons from './utils/DrawerIcons';
 
 const drawerWidth = 240;
 
@@ -55,7 +54,7 @@ class DrawerBar extends Component {
     this.props.handleDrawer({ open: false });
   }
 
-  render(){
+  render() {
     const { open, classes, theme } = this.props;
     return (
       <Drawer
@@ -71,10 +70,9 @@ class DrawerBar extends Component {
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
           </div>
-          <Divider />
-          <List className={classes.list}>{mailFolderListItems}</List>
-          <Divider />
-          <List className={classes.list}>{otherMailFolderListItems}</List>
+          <List>
+            <DrawerIcons />
+          </List>
         </div>
       </Drawer>
     );

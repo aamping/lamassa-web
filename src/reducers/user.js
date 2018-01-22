@@ -22,6 +22,12 @@ export default (state = initialState, action) => {
         cart: action.payload,
         ts: (new Date()).getTime(),
       };
+    case user.REMOVE_CART:
+      return {
+        ...state,
+        cart: action.payload,
+        ts: (new Date()).getTime(),
+      };
     case user.HANDLE_DRAWER:
       return {
         ...state,

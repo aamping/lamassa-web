@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import classNames from 'classnames'
 import { withStyles } from 'material-ui/styles';
 import ExpansionPanel, {
@@ -12,9 +14,11 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
 import DeleteIcon from 'material-ui-icons/Delete';
-import Select from 'material-ui/Select';
-import Input, { InputLabel } from 'material-ui/Input';
+import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
+
+import { removeFromCart } from '../actions/userActions';
+import DialogConfirm from './DialogConfirm';
 
 const styles = theme => ({
   root: {
@@ -68,7 +72,8 @@ class ExpansionList extends React.Component {
   state = {
     expanded: null,
     tipus: '',
-    quantitat: 0
+    quantitat: 0,
+    open: false,
   };
 
   handleChange = panel => (event, expanded) => {
@@ -77,80 +82,134 @@ class ExpansionList extends React.Component {
     });
   };
   handleChangeSelection = name => event => {
-  this.setState({ [name]: event.target.value });
-};
+    this.setState({ [name]: event.target.value });
+  };
+
+  handleDelete = () => {
+    this.props.removeFromCart(this.props.cart, this.state.selectedItem);
+    this.handleCloseConfirm();
+  }
 
   render() {
-    const { classes } = this.props;
+    const { classes, cart } = this.props;
 
     return (
       <div className={classes.root}>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <div className={classes.column} style={{ display: 'flex' }}>
-              <DeleteIcon onClick={() => console.log('weke')} style={{ marginRight: 20 }}/>
-              <Typography className={classes.heading}>Location</Typography>
-            </div>
-            <div className={classes.column} style={{ display: 'flex' }}>
-              <Typography className={classes.secondaryHeading}>Quantitat: </Typography>
-              <Chip label="1" className={classes.chip} />
-              <Typography className={classes.secondaryHeading}>Tipus: </Typography>
-              <Chip label="10 € - 1 kg de pa" className={classes.chip} />
-            </div>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={classes.details}>
-            <div className={classes.column}>
-              <img className={classes.img} alt='' src='/item_espelta.jpg' />
-            </div>
-            <div className={classes.column}>
-              <Typography className={classes.secondaryHeading}>Select trip destination</Typography>
-            </div>
-            <div className={classNames(classes.column, classes.helper)}>
-              <div style={{ display: 'flex', flex: 1, justifyContent: 'right', alignItems: 'right' }}>
-                <InputLabel htmlFor="age-native-simple">Quantitat</InputLabel>
-                <Select
-                  native
-                  value={this.state.quantitat}
-                  onChange={this.handleChangeSelection('quantitat')}
-                  input={<Input id="age-native-simple" />}
-                >
-                  <option value="0" />
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                </Select>
+        {cart.map((value, index) => (
+          <ExpansionPanel style={{ width: '80%'}} key={value.item.pk} >
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <div className={classes.column} style={{ display: 'flex' }}>
+                <DeleteIcon onClick={() => this.handleClickOpenConfirm(value.item.pk)} style={{ marginRight: 20 }}/>
+                <Typography className={classes.heading}>{value.item.nom}</Typography>
               </div>
-              <div>
-                <InputLabel htmlFor="age-native-simple">Tipus</InputLabel>
-                <Select
-                  native
-                  value={this.state.tipus}
-                  onChange={this.handleChangeSelection('tipus')}
-                  input={<Input id="age-native-simple" />}
-                >
-                  <option value="0" />
-                  <option value={10}>10 € - 1 kg de pa</option>
-                  <option value={20}>5 € - 1 kg de pa</option>
-                  <option value={30}>2 € - 1 kg de pa</option>
-                </Select>
+              <div className={classes.column} style={{ display: 'flex' }}>
+                <Typography className={classes.secondaryHeading}>Quantitat: </Typography>
+                <Chip label={value.comanda.quantitat} className={classes.chip} />
+                <Typography className={classes.secondaryHeading}>Tipus: </Typography>
+                <Chip label={value.comanda.tipus.nom + ` (${value.comanda.tipus.preu} €)`} className={classes.chip} />
+                <Typography className={classes.secondaryHeading}>Total: </Typography>
+                <Chip label={value.comanda.preuTotal + ' €'} className={classes.chip} />
               </div>
-            </div>
-          </ExpansionPanelDetails>
-          <Divider />
-          <ExpansionPanelActions>
-            <Button dense>Cancel</Button>
-            <Button dense color="primary">
-              Save
-            </Button>
-          </ExpansionPanelActions>
-        </ExpansionPanel>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.details}>
+              <div className={classes.column}>
+                <img className={classes.img} alt='' src={'https://lamassa.org'+value.item.thumb} />
+                <Typography className={classes.secondaryHeading}>{value.item.text_curt}</Typography>
+              </div>
+              <div className={classes.column}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="dia"
+                label="Dia d'entrega:"
+                type="dia"
+                value={value.comanda.dia}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="hora"
+                label="Franja Horària:"
+                type="hora"
+                value={value.comanda.hora}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="frequencia"
+                label="Freqüència:"
+                type="frequencia"
+                value={value.comanda.frequencia}
+              />
+              </div>
+              <div className={classNames(classes.column, classes.helper)}>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="quantitat"
+                  label="Quantitat: "
+                  type="quantitat"
+                  value={value.comanda.quantitat}
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="tipus"
+                  label="Format: "
+                  type="tipus"
+                  value={value.comanda.tipus.nom + ` (${value.comanda.tipus.preu} €)`}
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="hora"
+                  label="Preu Total:"
+                  type="hora"
+                  value={value.comanda.preuTotal}
+                />
+
+              </div>
+            </ExpansionPanelDetails>
+            <Divider />
+            <ExpansionPanelActions>
+              <Button dense>Cancel·la</Button>
+            </ExpansionPanelActions>
+          </ExpansionPanel>
+        ))}
+        <DialogConfirm
+          open={this.state.open}
+          handleConfirm={this.handleDelete}
+          handleClose={this.handleCloseConfirm}
+        />
       </div>
     );
   }
+
+  handleClickOpenConfirm = (itemPk) => {
+    this.setState({
+      open: true,
+      selectedItem: itemPk
+    });
+  };
+
+  handleCloseConfirm = () => {
+    this.setState({ open: false });
+  };
 }
 
 ExpansionList.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ExpansionList);
+const mapStateToProps = (state) => {
+  const { cart } = state.user;
+  console.log(cart);
+  return { cart };
+}
+
+export default compose(
+  withStyles(styles, {
+    name: 'ExpansionList',
+  }),
+  connect(mapStateToProps, { removeFromCart }),
+)(ExpansionList);

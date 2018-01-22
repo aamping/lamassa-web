@@ -10,21 +10,21 @@ export const CATEGORY_UPDATED = '@@api/CATEGORY_UPDATED';
 
 export const fetchList = () => ({
   [RSAA]: {
-     endpoint: 'https://lamassa.org/api/list',
-     method: 'POST',
-     headers: withAuth({ 'Content-Type': 'application/json' }),
-     types: [
-       FETCH_REQUEST, FETCH_SUCCESS, FETCH_FAILURE
-     ]
-   }
-})
+    endpoint: 'https://lamassa.org/api/auth/list',
+    method: 'POST',
+    headers: withAuth({ 'Content-Type': 'application/json' }),
+    types: [
+      FETCH_REQUEST, FETCH_SUCCESS, FETCH_FAILURE,
+    ],
+  },
+});
 
 export const searchUpdated = ({ term }) => ({
   type: SEARCH_UPDATED,
-  payload: term
-})
+  payload: term,
+});
 
 export const categoryUpdated = ({ term }) => ({
   type: CATEGORY_UPDATED,
-  payload: term
-})
+  payload: term,
+});

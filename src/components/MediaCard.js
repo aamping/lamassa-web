@@ -65,8 +65,8 @@ class MediaCard extends Component {
   componentWillMount() {
     this.setState({
       openDialogCart: [],
-      quantitat: 0,
-      tipus: -1,
+      quantitat: [],
+      tipus: [],
     });
   }
 
@@ -80,16 +80,16 @@ class MediaCard extends Component {
     this.props.addFavorites({ favorites, itemPk });
   }
 
-  handleChange = name => event => {
-    console.log(event.target.value);
+  handleChange = (name, index) => event => {
+    const element = this.state[name];
+    element[index] = event.target.value;
     this.setState({
-      [name]: event.target.value,
+      element,
     });
   }
-  handleCartButton(value) {
-    const { tipus, quantitat } = this.state;
+  handleAddCart(item, comanda) {
     const { cart } = this.props;
-    this.props.addToCart({ tipus, quantitat, cart, item: value });
+    this.props.addToCart(item, comanda, cart);
   }
 // <CardActions disableActionSpacing>
   render() {
@@ -155,8 +155,8 @@ class MediaCard extends Component {
                   <FormControl className={classes.formControl}>
                     <Select
                       native
-                      value={this.state.quantitat}
-                      onChange={this.handleChange('quantitat')}
+                      value={this.state.quantitat[index]}
+                      onChange={this.handleChange('quantitat', index)}
                       className={classes.selectEmpty}
                     >
                       {totalQuantitat.map(value => (
@@ -167,8 +167,8 @@ class MediaCard extends Component {
                   <FormControl className={classes.formControl}>
                     <Select
                       native
-                      value={this.state.tipus}
-                      onChange={this.handleChange('tipus')}
+                      value={this.state.tipus[index]}
+                      onChange={this.handleChange('tipus', index)}
                       className={classes.selectEmpty}
                     >
                       {value.formats.map((value, index) => (
@@ -188,19 +188,17 @@ class MediaCard extends Component {
                     <ShoppingCartIcon style={{ color: 'black' }} />
                   </Button>
                   <DialogForm
-                    submitForm={this.props.addToCart}
+                    submitForm={this.handleAddCart.bind(this)}
                     handleClose={() => {
                       const { openDialogCart } = this.state;
                       openDialogCart[index] = false;
                       this.handleDialogForm({ openDialogCart });
                     }}
                     open={this.state.openDialogCart[index]}
-                    item={{
-                      ...value,
-                      selected: {
-                        quantitat: !this.state.quantitat ? 1 : this.state.quantitat,
-                        tipus: this.state.tipus === -1 ? value.formats[0]: value.formats[this.state.tipus],
-                      }
+                    item={value}
+                    selected={{
+                      quantitat: !this.state.quantitat ? 1 : this.state.quantitat,
+                      tipus: this.state.tipus === -1 ? value.formats[0]: value.formats[this.state.tipus],
                     }}
                   />
                 </CardActions>

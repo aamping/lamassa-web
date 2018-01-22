@@ -10,10 +10,22 @@ import Dialog, {
   withMobileDialog,
 } from 'material-ui/Dialog';
 
+import StepperCart from './StepperCart';
+
+const styles = {
+  containerTextImg: {
+    display: 'flex',
+  },
+  img: {
+    maxHeight: 200,
+    padding: 30,
+  },
+}
+
 class DialogForm extends Component {
-  // eslint-disable-next-line
   state = {
     open: false,
+    entrega: '',
   };
 
   handleClickOpen = () => {
@@ -24,8 +36,20 @@ class DialogForm extends Component {
     this.setState({ open: false });
   };
 
+  handleChange = name => event => {
+    console.log(event.target.value);
+    this.setState({
+      [name]: event.target.value,
+    });
+  }
+
   render() {
-    const { fullScreen, handleClose, open, item } = this.props;
+    const { fullScreen, handleClose, open, item, selected } = this.props;
+    const entrega = {
+      dia: ['Dilluns 17', 'Dilluns 23', 'Dilluns 29'],
+      hora: ['13:00-14:00', '19:00-20:00'],
+      frequencia: ['una sola vegada', 'cada 2 setmanes', 'cada 4 setmanes'],
+    };
 
     return (
       <Dialog
@@ -37,52 +61,64 @@ class DialogForm extends Component {
         <DialogTitle id="responsive-dialog-title">{"Nova Comanda: "}</DialogTitle>
         <DialogContent>
           <DialogContentText />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="producte"
-            label="Producte:"
-            type="producte"
-            fullWidth
-            value={item.nom}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="tipus"
-            label="Format:"
-            type="tipus"
-            value={item.selected.tipus.nom}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="quantitat"
-            label="Quantitat:"
-            type="quantitat"
-            fullWidth
-            value={item.selected.quantitat}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="preu"
-            label="Preu:"
-            type="preu"
-            fullWidth
-            value={item.selected.tipus.preu}
-          />
+          <div style={styles.containerTextImg}>
+            <div>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="producte"
+                label="Producte:"
+                type="producte"
+                fullWidth
+                value={item.nom}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="tipus"
+                label="Format:"
+                type="tipus"
+                value={selected.tipus ? (selected.tipus.nom + ` (${selected.tipus.preu} €)`) : null}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="quantitat"
+                label="Quantitat:"
+                type="quantitat"
+                fullWidth
+                value={selected.quantitat}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="preu"
+                label="Preu Total:"
+                type="preu"
+                fullWidth
+                value={selected.tipus ? (selected.tipus.preu * selected.quantitat) : null}
+              />
+            </div>
+            <img alt='' src='/item_espelta.jpg' style={styles.img} />
+          </div>
+        <StepperCart
+          data={entrega}
+          submit={this.addCart}
+        />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+            Cancel·la
           </Button>
         </DialogActions>
       </Dialog>
     );
+  }
+  addCart = (entrega) => {
+    const { item, selected } = this.props;
+    const comanda = { ...selected, ...entrega, preuTotal: (selected.tipus.preu * selected.quantitat) };
+    this.props.submitForm(item, comanda);
+    this.props.handleClose();
   }
 }
 

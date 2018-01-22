@@ -13,26 +13,26 @@ export const login = (username, password) => ({
   [RSAA]: {
     endpoint: 'https://lamassa.org/api/auth/token/obtain/',
     method: 'POST',
-    body: JSON.stringify({username, password}),
+    body: JSON.stringify({ username, password }),
     headers: { 'Content-Type': 'application/json' },
     types: [
-      LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE
-    ]
-  }
-})
+      LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
+    ],
+  },
+});
 
-export const refreshAccessToken = (token) => ({
+export const refreshAccessToken = token => ({
   [RSAA]: {
     endpoint: 'https://lamassa.org/api/auth/token/refresh/',
     method: 'POST',
-    body: JSON.stringify({refresh: token}),
+    body: JSON.stringify({ refresh: token }),
     headers: { 'Content-Type': 'application/json' },
     types: [
-      TOKEN_REQUEST, TOKEN_RECEIVED, TOKEN_FAILURE
-    ]
-  }
-})
+      TOKEN_REQUEST, TOKEN_RECEIVED, TOKEN_FAILURE,
+    ],
+  },
+});
 
 export const userLogout = () => ({
-  type: LOGOUT
-})
+  type: LOGOUT,
+});

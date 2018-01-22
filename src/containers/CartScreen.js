@@ -10,20 +10,22 @@ const styles = theme => ({
     width: '100%',
     flexGrow: 1,
     backgroundColor: '#f7ecb5',
-    padding: 24,
+    paddingTop: 24,
+    paddingLeft: 24,
     height: 'calc(100% - 56px)',
     marginTop: 56,
     [theme.breakpoints.up('sm')]: {
       height: 'calc(100% - 64px)',
       marginTop: 64,
-    }
-  }
+    },
+    overflow: 'hidden',
+  },
 });
 
 
 function CartScreen(props) {
   const { classes } = props;
-  return(
+  return (
     <div>
       <main className={classes.content}>
         <ExpansionList />

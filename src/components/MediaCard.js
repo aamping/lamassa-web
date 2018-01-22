@@ -197,8 +197,8 @@ class MediaCard extends Component {
                     open={this.state.openDialogCart[index]}
                     item={value}
                     selected={{
-                      quantitat: !this.state.quantitat ? 1 : this.state.quantitat,
-                      tipus: this.state.tipus === -1 ? value.formats[0]: value.formats[this.state.tipus],
+                      quantitat: !this.state.quantitat[index] ? 1 : this.state.quantitat[index],
+                      tipus: !this.state.tipus[index] ? value.formats[0]: value.formats[this.state.tipus[index]],
                     }}
                   />
                 </CardActions>

@@ -22,7 +22,7 @@ $(sudo) npm install -g react
 
 Clone the project:
 ```
-$ git clone https://github.com/aamping/lamassa-front.git
+$ git clone https://github.com/aamping/lamassa-web.git
 ```
 Install dependencies
 ```

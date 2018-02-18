@@ -3,28 +3,39 @@ import * as api from '../actions/apiActions';
 
 const initialState = {
   message: [],
-  filteredMessages: []
+  filteredMessages: [],
 };
 
 const KEYS_TO_FILTERS = ['nom', 'text'];
 
 export default (state = initialState, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case api.FETCH_SUCCESS:
       return {
         message: action.payload ? action.payload : [],
-        filteredMessages: action.payload ? action.payload : []
+        filteredMessages: action.payload ? action.payload : [],
       };
     case api.SEARCH_UPDATED:
       return {
         ...state,
-        filteredMessages: state.message.filter(createFilter(action.payload, KEYS_TO_FILTERS))
+        filteredMessages: state.message.filter(createFilter(action.payload, KEYS_TO_FILTERS)),
+      };
+    case api.CATEGORY_UPDATED: {
+      let msgs = state.message;
+      let oldArray = [];
+      if (action.payload.join()) {
+        action.payload.map((value) => {
+          const newArray = state.message.filter(createFilter(value, ['etiqueta.nom']));
+          msgs = oldArray.concat(newArray);
+          oldArray = msgs;
+          return null;
+        });
       }
-    case api.CATEGORY_UPDATED:
       return {
         ...state,
-        filteredMessages: state.message.filter(createFilter(action.payload, ['etiqueta.nom']))
-      }
+        filteredMessages: msgs,
+      };
+    }
     default:
       return state;
   }

@@ -4,6 +4,7 @@ import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import { connect } from 'react-redux';
+import Hidden from 'material-ui/Hidden';
 
 import { fetchList, searchUpdated, categoryUpdated } from '../actions/apiActions';
 import categories from '../data/categories.json';
@@ -71,15 +72,17 @@ class SearchApp extends Component {
   renderMenuCategory(anchorEl) {
     return(
       <div>
-        <Button
-          raised
-          dense
-          aria-owns={anchorEl ? 'simple-menu' : null}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          {this.renderButtonCategory(this.state.categoryTerm)}
-        </Button>
+        <Hidden lgUp>
+          <Button
+            raised
+            dense
+            aria-owns={anchorEl ? 'simple-menu' : null}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+          >
+            {this.renderButtonCategory(this.state.categoryTerm)}
+          </Button>
+        </Hidden>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -117,7 +120,7 @@ class SearchApp extends Component {
         <div style={styles.searchBar}>
           {this.renderMenuCategory(this.state.anchorEl)}
           <div style={styles.search}>
-            <SearchInput className="search-input" onChange={this.searchUpdated} />
+            <SearchInput className="search-input" placeholder='Cerca' onChange={this.searchUpdated} />
           </div>
         </div>
     );

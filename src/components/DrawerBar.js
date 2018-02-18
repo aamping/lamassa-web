@@ -9,6 +9,7 @@ import List from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import Hidden from 'material-ui/Hidden';
 
 import { handleDrawer } from '../actions/userActions';
 import DrawerIcons from './utils/DrawerIcons';
@@ -17,14 +18,13 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   drawerPaper: {
-    position: 'static',
-    height: '100%',
+    position: 'fixed',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor: '#508a4c'
+    backgroundColor: '#508a4c',
   },
   drawerPaperClose: {
     width: 60,
@@ -36,7 +36,7 @@ const styles = theme => ({
   },
   drawerInner: {
     // Make the items inside not wrap when transitioning:
-    width: drawerWidth
+    width: drawerWidth,
   },
   drawerHeader: {
     display: 'flex',
@@ -57,27 +57,50 @@ class DrawerBar extends Component {
   render() {
     const { open, classes, theme } = this.props;
     return (
-      <Drawer
-        type="permanent"
-        classes={{
-          paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.drawerInner}>
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose.bind(this)}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </div>
-          <List>
-            <DrawerIcons />
-          </List>
-        </div>
-      </Drawer>
+      <div>
+        <Hidden smDown>
+          <Drawer
+            type="permanent"
+            classes={{
+              paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose),
+            }}
+            open={open}
+          >
+            <div className={classes.drawerInner}>
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.handleDrawerClose.bind(this)}>
+                  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
+              </div>
+              <List>
+                <DrawerIcons />
+              </List>
+            </div>
+          </Drawer>
+        </Hidden>
+        <Hidden mdUp>
+          <Drawer
+            type="persistent"
+            open={open}
+          >
+            <div className={classes.drawerInner}>
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.handleDrawerClose.bind(this)}>
+                  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
+              </div>
+              <List>
+                <DrawerIcons />
+              </List>
+            </div>
+          </Drawer>
+        </Hidden>
+      </div>
     );
   }
 }
+
+//         <Hidden smDown>
 
 DrawerBar.propTypes = {
   classes: PropTypes.object.isRequired,

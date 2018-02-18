@@ -15,6 +15,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import * as reducers from '../reducers';
 import { userLogout } from '../actions/authActions';
 import { handleDrawer } from '../actions/userActions';
+import './AppBarTitle.css';
 
 const drawerWidth = 240;
 
@@ -33,7 +34,7 @@ const styles = theme => ({
     height: '100%',
   },
   appBar: {
-    position: 'absolute',
+    position: 'fixed',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -100,11 +101,11 @@ class AppBarTitle extends Component {
               >
                 <MenuIcon />
               </IconButton>
-              <div style={{ fontFamily: "'Barrio', cursive", fontSize: '3em', color: '#f6a828' }}>
+              <div style={{ fontFamily: "'Barrio', cursive", fontSize: '2em', color: '#f6a828' }}>
                 LA FIGUERA
               </div>
               {isAuthenticated && (
-                <div>
+                <div className='profile-icon'>
                   <IconButton
                     aria-owns={openProfileMenu ? 'menu-appbar' : null}
                     aria-haspopup="true"

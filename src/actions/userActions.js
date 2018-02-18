@@ -28,10 +28,8 @@ export const addToCart = (item, comanda, cart) => {
     return false;
   });
   if (exist) {
-    console.log(true, pos);
     cart.push({ item, comanda });
   } else {
-    console.log(false);
     cart.push({ item, comanda });
   }
   return {

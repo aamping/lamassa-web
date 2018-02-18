@@ -19,17 +19,22 @@ import StarRatingComponent from 'react-star-rating-component';
 import { addFavorites } from '../actions/userActions';
 import { addToCart } from '../actions/userActions';
 import DialogForm from './DialogForm';
+import './MediaCard.css';
 
 const totalQuantitat = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const styles = theme => ({
+  gridItem: {
+    padding: 10,
+  },
   card: {
-    width: 380,
-    height: 300
+    width: 340,
+    height: 340,
   },
   media: {
-    maxWidth: 300,
-    height: 150
+    maxWidth: 150,
+    height: 150,
+
   },
   tipus: {
     flex: 'auto'
@@ -97,14 +102,14 @@ class MediaCard extends Component {
     return (
       <Grid container
         alignItems={'center'}
-        spacing={40}
+        spacing={24}
         direction={'row'}
         justify={'center'}
       >
       {data.map((value, index) => {
         if (!isFavorites || favorites.includes(value.pk)) {
           return (
-            <Grid item key={value.nom}>
+            <Grid className={classes.gridItem} item key={value.nom}>
               <Card className={classes.card}>
                 <CardHeader
                   style={{paddingBottom: 5}}
@@ -143,7 +148,7 @@ class MediaCard extends Component {
                     </div>
                   }
                 />
-                <div className={classes.div}>
+                <div className='media-container'>
                   <img alt='' src={url+value.thumb} href={url + value.foto} className={classes.media}/>
                   <CardContent>
                     <Typography>
@@ -151,42 +156,41 @@ class MediaCard extends Component {
                     </Typography>
                   </CardContent>
                 </div>
+                <FormControl className={classes.formControl} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Select
+                    native
+                    value={this.state.quantitat[index]}
+                    onChange={this.handleChange('quantitat', index)}
+                    className={classes.selectEmpty}
+                  >
+                    {totalQuantitat.map(value => (
+                      <option key={value} value={value}>{value}</option>
+                    ))}
+                  </Select>
+                  <Select
+                    native
+                    fullWidth
+                    value={this.state.tipus[index]}
+                    onChange={this.handleChange('tipus', index)}
+                    className={classes.selectEmpty}
+                  >
+                    {value.formats.map((value, index) => (
+                      <option key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
+                    ))}
+                  </Select>
+                </FormControl>
                 <CardActions className={classes.container} disableActionSpacing>
-                  <FormControl className={classes.formControl}>
-                    <Select
-                      native
-                      value={this.state.quantitat[index]}
-                      onChange={this.handleChange('quantitat', index)}
-                      className={classes.selectEmpty}
-                    >
-                      {totalQuantitat.map(value => (
-                        <option key={value} value={value}>{value}</option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl className={classes.formControl}>
-                    <Select
-                      native
-                      value={this.state.tipus[index]}
-                      onChange={this.handleChange('tipus', index)}
-                      className={classes.selectEmpty}
-                    >
-                      {value.formats.map((value, index) => (
-                        <option key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <Button
-                    raised
-                    dense
-                    onClick={() => {
-                      const { openDialogCart } = this.state;
-                      openDialogCart[index] = true;
-                      this.handleDialogForm({ openDialogCart });
-                    }}
-                    color="default">
-                    <ShoppingCartIcon style={{ color: 'black' }} />
-                  </Button>
+                    <Button
+                      style={{ marginLeft: 'auto'}}
+                      dense
+                      onClick={() => {
+                        const { openDialogCart } = this.state;
+                        openDialogCart[index] = true;
+                        this.handleDialogForm({ openDialogCart });
+                      }}
+                      color="default">
+                      <ShoppingCartIcon style={{ color: 'black' }} />
+                    </Button>
                   <DialogForm
                     submitForm={this.handleAddCart.bind(this)}
                     handleClose={() => {

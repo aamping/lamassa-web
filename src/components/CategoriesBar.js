@@ -24,7 +24,6 @@ const styles = theme => ({
     width: '100%',
     minWidth: 200,
     padding: 20,
-    marginLeft: 15,
     // backgroundColor: theme.palette.background.paper,
   },
 });
@@ -56,12 +55,12 @@ class CategoriesBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography className={classes.titleList}>
+        <div className="cards-title" style={{ textAlign: 'center' }}>
           Categories
-        </Typography>
+        </div>
         <List>
           <ListItem dense button className={classes.listItem}>
-            <ListItemText className={classes.textList} primary={'Totes les categories'} />
+            <div style={{ marginLeft: 10 }} className="cards-text">{'Totes les categories'} </div>
             <ListItemSecondaryAction>
               <Checkbox
                 onChange={this.handleToggle(0)}
@@ -72,7 +71,7 @@ class CategoriesBar extends React.Component {
           {categories.map(value => (
             <ListItem key={value.name} dense button className={classes.listItem}>
               <Avatar alt={value.name} src={value.img} />
-              <ListItemText className={classes.textList} primary={value.name} />
+              <div style={{ marginLeft: 10 }} className="cards-text">{value.name} </div>
               <ListItemSecondaryAction>
                 <Checkbox
                   onChange={this.handleToggle(value.name)}

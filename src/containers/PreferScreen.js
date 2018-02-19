@@ -1,33 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
+import Hidden from 'material-ui/Hidden';
 import SearchApp from '../components/SearchApp';
 import MediaCard from '../components/MediaCard';
+import CategoriesBar from '../components/CategoriesBar';
 
 const styles = theme => ({
   content: {
-    width: '100%',
-    flexGrow: 1,
-    backgroundColor: '#f7ecb5',
+    width: 'inherit',
+    // flexGrow: 1,
     paddingTop: 24,
-    height: 'calc(100% - 56px)',
     marginTop: 56,
+    marginLeft: 50,
     [theme.breakpoints.up('sm')]: {
-      height: 'calc(100% - 64px)',
-      marginTop: 64,
+      marginLeft: 54,
     },
-    overflow: 'hidden',
-  }
+  },
 });
 
 
 function PreferScreen(props) {
-  const { classes } = props;
-  return(
-    <div>
+  const { classes, data } = props;
+  return (
+    <div style={{ width: '-webkit-fill-available' }}>
       <main className={classes.content}>
         <SearchApp />
-        <MediaCard isFavorites />
+        <Grid
+          container
+        >
+          <Hidden smDown>
+            <Grid item md={1} lg={2}>
+              <Hidden mdDown>
+                <CategoriesBar />
+              </Hidden>
+            </Grid>
+          </Hidden>
+          <Grid item xs={12} sm={12} md={10} lg={10}>
+            <MediaCard isFavorites data={data} />
+          </Grid>
+        </Grid>
       </main>
     </div>
   );
@@ -38,4 +53,15 @@ PreferScreen.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(PreferScreen);
+const mapStateToProps = ({ api }) => {
+  const { filteredMessages } = api;
+  return { data: filteredMessages };
+};
+
+export default compose(
+  withStyles(styles, {
+    withTheme: true,
+    name: 'PreferScreen',
+  }),
+  connect(mapStateToProps, null),
+)(PreferScreen);

@@ -9,7 +9,7 @@ const styles = {
   appFrame: {
     // position: 'relative',
     // display: 'flex',
-    backgroundColor: '#f7ecb5',
+    backgroundColor: '#e9ffaf',
     // height: '-webkit-fill-available',
     overflow: 'hidden',
   },
@@ -24,7 +24,7 @@ const App = () => {
         <PrivateRoute path="/" component={ListScreen} />
       </Switch>
       <footer>
-        weke
+        NEED FOOTER
       </footer>
     </div>
   );

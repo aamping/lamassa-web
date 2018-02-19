@@ -40,7 +40,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: 'black'
+    backgroundColor: '#90ae68'
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -101,7 +101,7 @@ class AppBarTitle extends Component {
               >
                 <MenuIcon />
               </IconButton>
-              <div style={{ fontFamily: "'Barrio', cursive", fontSize: '2em', color: '#f6a828' }}>
+              <div style={{ fontFamily: "'Barrio', cursive", fontSize: '2em', color: '#ebf9d6' }}>
                 LA FIGUERA
               </div>
               {isAuthenticated && (

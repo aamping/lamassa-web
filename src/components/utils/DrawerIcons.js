@@ -18,7 +18,7 @@ const DrawerIcons = (props) => {
       <Link to="/">
         <ListItem button>
           <ListItemIcon>
-            <HomeIcon />
+            <HomeIcon style={{ color: "#ebf9d6" }} />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
@@ -26,7 +26,7 @@ const DrawerIcons = (props) => {
       <Link to="/preferits">
         <ListItem button>
           <ListItemIcon>
-            <FavoriteIcon />
+            <FavoriteIcon style={{ color: "#ebf9d6" }} />
           </ListItemIcon>
           <ListItemText primary="Favorite" />
         </ListItem>
@@ -35,7 +35,7 @@ const DrawerIcons = (props) => {
         <ListItem button>
           <ListItemIcon>
             <Badge badgeContent={props.cart.length} color="primary">
-              <ShoppingCartIcon />
+              <ShoppingCartIcon style={{ color: "#ebf9d6" }} />
             </Badge>
           </ListItemIcon>
           <ListItemText primary="Cart" />
@@ -44,19 +44,19 @@ const DrawerIcons = (props) => {
       <Divider />
       <ListItem button>
         <ListItemIcon>
-          <MailIcon />
+          <MailIcon style={{ color: "#ebf9d6" }} />
         </ListItemIcon>
         <ListItemText primary="All mail" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
-          <HelpIcon />
+          <HelpIcon style={{ color: "#ebf9d6" }} />
         </ListItemIcon>
         <ListItemText primary="Help" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
-          <ContactMailIcon />
+          <ContactMailIcon style={{ color: "#ebf9d6" }} />
         </ListItemIcon>
         <ListItemText primary="Invite" />
       </ListItem>

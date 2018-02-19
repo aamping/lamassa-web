@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Hidden from 'material-ui/Hidden';
@@ -23,7 +25,7 @@ const styles = theme => ({
 
 
 function ListScreen(props) {
-  const { classes } = props;
+  const { classes, data } = props;
   return (
     <div style={{ width: '-webkit-fill-available' }}>
       <main className={classes.content}>
@@ -39,7 +41,7 @@ function ListScreen(props) {
             </Grid>
           </Hidden>
           <Grid item xs={12} sm={12} md={10} lg={10}>
-            <MediaCard />
+            <MediaCard data={data} />
           </Grid>
         </Grid>
       </main>
@@ -52,4 +54,15 @@ ListScreen.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(ListScreen);
+const mapStateToProps = ({ api }) => {
+  const { filteredMessages } = api;
+  return { data: filteredMessages };
+};
+
+export default compose(
+  withStyles(styles, {
+    withTheme: true,
+    name: 'ListScreen',
+  }),
+  connect(mapStateToProps, null),
+)(ListScreen);

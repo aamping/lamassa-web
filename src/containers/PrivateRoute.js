@@ -7,6 +7,7 @@ import DrawerBar from '../components/DrawerBar';
 import ListScreen from './ListScreen';
 import PreferScreen from './PreferScreen';
 import CartScreen from './CartScreen';
+import ProducteScreen from './ProducteScreen';
 
 const styles = {
   appFrame: {
@@ -31,6 +32,7 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
         <Switch style={styles.appScreens}>
           <Route path="/cart" component={CartScreen} />
           <Route path="/preferits" component={PreferScreen} />
+          <Route path="/producte$:product" component={ProducteScreen} />
           <Route path="/" component={ListScreen} />
         </Switch>
       </div>

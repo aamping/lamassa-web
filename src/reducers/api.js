@@ -4,6 +4,7 @@ import * as api from '../actions/apiActions';
 const initialState = {
   message: [],
   filteredMessages: [],
+  reviewProduct: {},
 };
 
 const KEYS_TO_FILTERS = ['nom', 'text'];
@@ -34,6 +35,15 @@ export default (state = initialState, action) => {
       return {
         ...state,
         filteredMessages: msgs,
+      };
+    }
+    case api.REVIEW_PRODUCT: {
+      const reviewProduct = state.message.filter(createFilter(action.payload.toString(), ['pk']));
+      const productsProducer = state.message.filter(createFilter(reviewProduct[0].productor.id.toString(), ['productor.id']));
+      return {
+        ...state,
+        reviewProduct: reviewProduct[0],
+        productsProducer,
       };
     }
     default:

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
@@ -18,6 +19,7 @@ import { ListItemIcon } from 'material-ui/List';
 import StarRatingComponent from 'react-star-rating-component';
 import { addFavorites } from '../actions/userActions';
 import { addToCart } from '../actions/userActions';
+import { reviewProduct } from '../actions/apiActions';
 import DialogForm from './DialogForm';
 import './MediaCard.css';
 
@@ -28,8 +30,9 @@ const styles = theme => ({
     padding: 10,
   },
   card: {
-    width: 340,
-    height: 340,
+    width: 380,
+    height: 380,
+    backgroundColor: '#ebf9d6',
   },
   media: {
     maxWidth: 150,
@@ -110,14 +113,14 @@ class MediaCard extends Component {
         if (!isFavorites || favorites.includes(value.pk)) {
           return (
             <Grid className={classes.gridItem} item key={value.nom}>
-              <Card className={classes.card}>
+              <Card className="cards-list">
                 <CardHeader
                   style={{paddingBottom: 5}}
                   action={
                     <div>
                     <div>
                       <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
-                        <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#f6a828' } : {color: 'grey' }} />
+                        <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#da6d76' } : {color: '#c4d97e' }} />
                       </IconButton>
                       <IconButton aria-label="Share">
                         <ShareIcon />
@@ -134,8 +137,8 @@ class MediaCard extends Component {
                     </div>
                   }
                   title={
-                    <div className={classes.text}>
-                      {value.nom}
+                    <div className="title-cards">
+                      <Link className="cards-title" onClick={() => this.props.reviewProduct({term: value.pk})} to={`/producte$${value.pk}`}>{value.nom}</Link>
                       <ListItemIcon>
                         <img style={{ marginLeft: 10 }} alt='' src={url+value.etiqueta.img} />
                       </ListItemIcon>
@@ -143,42 +146,41 @@ class MediaCard extends Component {
                   }
                   subheader={
                     <div style={{ display: 'flex' }}>
-                      <Typography type='button'><a className={classes.text} href="http://www.yahoo.com"> {value.productor.nom}</a></Typography>
+                      <Typography type='button'><a className="cards-subtitle" href="http://www.yahoo.com"> {value.productor.nom}</a></Typography>
                       <MessageIcon style={{ marginLeft: 10 }}/>
                     </div>
                   }
                 />
                 <div className='media-container'>
-                  <img alt='' src={url+value.thumb} href={url + value.foto} className={classes.media}/>
+                  <img alt='' src={url+value.thumb} href={url + value.foto} className="cards-image"/>
                   <CardContent>
-                    <Typography>
+                    <div className="cards-text">
                       {value.text_curt}
-                    </Typography>
+                    </div>
                   </CardContent>
                 </div>
-                <FormControl className={classes.formControl} style={{ display: 'flex', flexDirection: 'row' }}>
+                <div className={classes.formControl, "form-card-select-product"}>
                   <Select
                     native
                     value={this.state.quantitat[index]}
                     onChange={this.handleChange('quantitat', index)}
-                    className={classes.selectEmpty}
+                    className={classes.selectEmpty, "cards-selector-text"}
                   >
                     {totalQuantitat.map(value => (
-                      <option key={value} value={value}>{value}</option>
+                      <option className="cards-selector-text" key={value} value={value}>{value}</option>
                     ))}
                   </Select>
                   <Select
                     native
-                    fullWidth
                     value={this.state.tipus[index]}
                     onChange={this.handleChange('tipus', index)}
-                    className={classes.selectEmpty}
+                    className={classes.selectEmpty, "cards-selector-text"}
                   >
                     {value.formats.map((value, index) => (
-                      <option key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
+                      <option className="cards-selector-text" key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
                     ))}
                   </Select>
-                </FormControl>
+                </div>
                 <CardActions className={classes.container} disableActionSpacing>
                     <Button
                       style={{ marginLeft: 'auto'}}
@@ -220,12 +222,12 @@ MediaCard.propTypes = {
 
 const mapStateToProps = (state) => {
   const { favorites, ts, cart } = state.user;
-  return { favorites, ts, cart, data: state.api.filteredMessages };
+  return { favorites, ts, cart };
 }
 
 export default compose(
   withStyles(styles, {
     name: 'MediaCard',
   }),
-  connect(mapStateToProps, { addFavorites, addToCart }),
+  connect(mapStateToProps, { addFavorites, addToCart, reviewProduct }),
 )(MediaCard);

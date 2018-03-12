@@ -8,7 +8,7 @@ import apiMiddleware from './middleware';
 
 export default (history) => {
   const persistedFilter = createFilter('auth', ['access', 'refresh']);
-  const persistedUser = createFilter('user', ['cart', 'favorites']);
+  const persistedUser = createFilter('user', ['cart', 'favorites', 'user']);
 
   const reducer = persistReducer(
     {

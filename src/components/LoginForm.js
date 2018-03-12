@@ -56,6 +56,7 @@ class LoginForm extends Component {
           label="Contrasenya"
           onChange={this.handleChange}
           name="password"
+          type="password"
           value={formData.password}
           validators={['required']}
           errorMessages={['this field is required']}

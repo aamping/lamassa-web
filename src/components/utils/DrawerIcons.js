@@ -1,64 +1,66 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import { ListItem, ListItemIcon } from 'material-ui/List';
 import MailIcon from 'material-ui-icons/Mail';
 import ShoppingCartIcon from 'material-ui-icons/ShoppingCart';
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import HelpIcon from 'material-ui-icons/Help';
 import HomeIcon from 'material-ui-icons/Home';
-import ContactMailIcon from 'material-ui-icons/ContactMail';
 import Badge from 'material-ui/Badge';
 import Divider from 'material-ui/Divider';
+import ShareIcon from 'material-ui-icons/Share';
 
 const DrawerIcons = (props) => {
   return (
     <div>
       <Divider />
-      <Link to="/">
+      <Link className="drawer-list" to="/">
         <ListItem button>
           <ListItemIcon>
-            <HomeIcon style={{ color: "#ebf9d6" }} />
+            <HomeIcon className="drawer-icon"/>
           </ListItemIcon>
-          <ListItemText primary="Home" />
+          <div className="drawer-text">Botiga</div>
         </ListItem>
       </Link>
-      <Link to="/preferits">
+      <Link className="drawer-list" to="/preferits">
         <ListItem button>
           <ListItemIcon>
-            <FavoriteIcon style={{ color: "#ebf9d6" }} />
-          </ListItemIcon>
-          <ListItemText primary="Favorite" />
-        </ListItem>
-      </Link>
-      <Link to="/cart">
-        <ListItem button>
-          <ListItemIcon>
-            <Badge badgeContent={props.cart.length} color="primary">
-              <ShoppingCartIcon style={{ color: "#ebf9d6" }} />
+            <Badge badgeContent={props.favorites.length} className="drawer-badge">
+              <FavoriteIcon className="drawer-icon"/>
             </Badge>
           </ListItemIcon>
-          <ListItemText primary="Cart" />
+          <div className="drawer-text">Preferits</div>
+        </ListItem>
+      </Link>
+      <Link className="drawer-list" to="/cart">
+        <ListItem button>
+          <ListItemIcon>
+            <Badge badgeContent={props.cart.length} className="drawer-badge">
+              <ShoppingCartIcon className="drawer-icon"/>
+            </Badge>
+          </ListItemIcon>
+          <div className="drawer-text">Cistella</div>
         </ListItem>
       </Link>
       <Divider />
-      <ListItem button>
+      <ListItem className="drawer-list" button>
         <ListItemIcon>
-          <MailIcon style={{ color: "#ebf9d6" }} />
+          <MailIcon className="drawer-icon" />
         </ListItemIcon>
-        <ListItemText primary="All mail" />
+        <div className="drawer-text">Missatges</div>
       </ListItem>
-      <ListItem button>
+      <ListItem className="drawer-list" button>
         <ListItemIcon>
-          <HelpIcon style={{ color: "#ebf9d6" }} />
+          <HelpIcon className="drawer-icon"/>
         </ListItemIcon>
-        <ListItemText primary="Help" />
+        <div className="drawer-text">Ajuda</div>
       </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <ContactMailIcon style={{ color: "#ebf9d6" }} />
+      <ListItem className="drawer-list" button>
+        <ListItemIcon aria-label="Convidar">
+          <ShareIcon style={{ color: "#ebf9d6" }}/>
         </ListItemIcon>
-        <ListItemText primary="Invite" />
+        <div className="drawer-text">Convida</div>
       </ListItem>
     </div>
   );
@@ -66,6 +68,7 @@ const DrawerIcons = (props) => {
 
 const mapStateToProps = ({ user }) => ({
   cart: user.cart,
+  favorites: user.favorites,
   ts: user.ts,
 });
 

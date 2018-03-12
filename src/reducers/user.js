@@ -1,4 +1,5 @@
 import * as user from '../actions/userActions';
+import * as auth from '../actions/authActions';
 
 const initialState = {
   favorites: [],
@@ -32,6 +33,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         open: action.payload,
+      };
+    case auth.LOGIN_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.user,
       };
     default:
       return state;

@@ -40,7 +40,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: '#90ae68'
+    backgroundColor: '#90ae68',
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -86,13 +86,13 @@ class AppBarTitle extends Component {
   }
 
   render() {
-    const { classes, isAuthenticated } = this.props;
+    const { classes, isAuthenticated, userInfo } = this.props;
     const { anchorEl } = this.state;
     const openProfileMenu = Boolean(anchorEl);
 
     return (
           <AppBar className={classNames(classes.appBar, this.props.open && classes.appBarShift)}>
-            <Toolbar disableGutters={!this.props.open}>
+            <Toolbar className="appbar-container" disableGutters={!this.props.open}>
               <IconButton
                 color="contrast"
                 aria-label="open drawer"
@@ -102,7 +102,7 @@ class AppBarTitle extends Component {
                 <MenuIcon />
               </IconButton>
               <div style={{ fontFamily: "'Barrio', cursive", fontSize: '2em', color: '#ebf9d6' }}>
-                LA FIGUERA
+                {userInfo ? userInfo.lloc_entrega.nom : ''}
               </div>
               {isAuthenticated && (
                 <div className='profile-icon'>
@@ -147,7 +147,8 @@ AppBarTitle.propTypes = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: reducers.isAuthenticated(state),
-  open: state.user.open
+  open: state.user.open,
+  userInfo: state.user.user,
 })
 
 export default compose(

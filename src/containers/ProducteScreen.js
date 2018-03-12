@@ -1,50 +1,74 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
-import Hidden from 'material-ui/Hidden';
 import SimpleMediaCard from '../components/SimpleMediaCard';
+import MediaCard from '../components/MediaCard';
+import ProductReviews from '../components/ProductReviews';
+import { fetchProduct } from '../actions/apiActions';
 
-const styles = theme => ({
-  content: {
-    width: 'inherit',
-    // flexGrow: 1,
-    padding: 24,
-    marginTop: 56,
-    marginLeft: 0,
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: 54,
-    },
-    // overflow: 'hidden',
-  },
-});
-
-
-function ProducteScreen(props) {
-  const { classes, data, location, reviewProduct, productsProducer } = props;
-  return (
-    <div className={classes.content} style={{ width: '-webkit-fill-available' }}>
-      <SimpleMediaCard producte={reviewProduct} productsProducer={productsProducer} />
-    </div>
-  );
+class ProducteScreen extends Component {
+  state= {
+    product: ''
+  }
+  componentWillMount() {
+    if (this.props.match.params.product) {
+      this.props.fetchProduct({term: this.props.match.params.product });
+      this.setState({ product: this.props.match.params.product })
+    }
+  }
+  componentDidUpdate() {
+    if (this.props.match.params.product !== this.state.product) {
+      this.props.fetchProduct({term: this.props.match.params.product });
+      this.setState({ product: this.props.match.params.product });
+      window.scrollTo(0,0);
+    }
+  }
+  render() {
+    const { reviewedProduct, productsProducer, productors, etiquetes } = this.props;
+    if (reviewedProduct && productsProducer) {
+      return (
+        <div style={{ width: '-webkit-fill-available' }}>
+          <Grid container>
+            <Grid item md={6}>
+              <div>weke</div>
+            </Grid>
+            <Grid item md={6}>
+              <SimpleMediaCard
+                producte={reviewedProduct}
+                productsProducer={productsProducer}
+              />
+              <ProductReviews />
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div className="cards-title"> DEL MATEIX PRODUCTOR/A: </div>
+              <br />
+              <MediaCard
+                data={productsProducer}
+                productors={productors}
+                etiquetes={etiquetes}
+              />
+            </Grid>
+          </Grid>
+        </div>
+      );
+    }
+    return (
+      <div> CARGANDO...</div>
+    );
+  }
 }
 
-ProducteScreen.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = ({ api }) => {
-  const { reviewProduct, productsProducer } = api;
-  return { reviewProduct, productsProducer };
+  const { reviewedProduct, productsProducer, productors, etiquetes } = api;
+  return { reviewedProduct, productsProducer, productors, etiquetes };
 };
 
 export default compose(
-  withStyles(styles, {
+  withStyles(null, {
     withTheme: true,
     name: 'ProducteScreen',
   }),
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, { fetchProduct }),
 )(ProducteScreen);

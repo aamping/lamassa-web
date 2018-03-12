@@ -1,30 +1,43 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
-import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
+import Card, { CardActions, CardContent, CardMedia, CardHeader } from 'material-ui/Card';
 import StarRatingComponent from 'react-star-rating-component';
+import ShoppingCartIcon from 'material-ui-icons/ShoppingCart';
+import IconButton from 'material-ui/IconButton';
+import FavoriteIcon from 'material-ui-icons/Favorite';
 import Select from 'material-ui/Select';
-
-const styles = {
-  card: {
-    // maxWidth: 700,
-  },
-  media: {
-    // height: 400,
-  },
-};
+import DialogForm from './DialogForm';
+import { addToCart, addFavorites } from '../actions/userActions';
 
 class SimpleMediaCard extends Component {
   state = {
     quantitat: 0,
-    tipus: "weke",
+    tipus: "",
+    openDialogCart: false,
+  }
+  handleChange = (name) => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  }
+  handleDialogForm({ openDialogCart }) {
+    this.setState({ openDialogCart });
+  }
+  handleAddCart(item, comanda) {
+    const { cart } = this.props;
+    this.props.addToCart(item, comanda, cart);
+  }
+  handleAddFavorites(itemPk) {
+    const { favorites } = this.props;
+    this.props.addFavorites({ favorites, itemPk });
   }
   render() {
-    const formats = [{ preu: 0, nom: "weke" }, { preu: 0, nom: "weke" }];
     const totalQuantitat = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const { classes, producte } = this.props;
+    const { producte, favorites } = this.props;
+    console.log(producte);
     return (
       <div>
         <Card className="card-review-product">
@@ -33,56 +46,96 @@ class SimpleMediaCard extends Component {
             image={`http://lamassa.org${producte.foto}`}
             title={producte.nom}
           />
+          <CardHeader
+            style={{paddingBottom: 5}}
+            action={
+              <div>
+              <div>
+                <IconButton>
+                </IconButton>
+                <IconButton onClick={() => this.handleAddFavorites(producte.pk)} aria-label="Afegir a preferits">
+                  <FavoriteIcon style={favorites.includes(producte.pk) ? { color: '#da6d76' } : {color: '#c4d97e' }} />
+                </IconButton>
+              </div>
+              <div style={{ fontSize: 20 }}>
+                <div className="cards-text">3.0 Estrelles</div>
+                <StarRatingComponent
+                  name="rate"
+                  editing={false}
+                  starCount={5}
+                  value={3}
+                />
+              </div>
+              </div>
+            }
+            title={
+              <div className="cards-title">
+                {producte.nom}
+              </div>
+            }
+            subheader={
+              <div>
+                <div className="cards-subtitle">
+                  {producte.productor.nom}
+                </div>
+              </div>
+            }
+          />
           <CardContent>
-            <div className="cards-title">
-              {producte.nom}
-            </div>
-            <div className="cards-subtitle">
-              {producte.productor.nom}
-            </div>
-            <div style={{ fontSize: 20 }}>
-              <StarRatingComponent
-                name="rate"
-                editing={false}
-                starCount={5}
-                value={3}
-              />
-            </div>
-            <Typography component="p">
+            <div className="cards-text">
               {producte.text_curt}
-            </Typography>
-            <div className="form-card-select-product" style={{ marginRight: 50}}>
+            </div>
+            <div style={{ display: 'flex' }}>
+              <div className="cards-selector-label">Quantitat:</div>
               <Select
                 native
                 value={this.state.quantitat}
-                onChange={""}
+                onChange={this.handleChange('quantitat')}
                 className="cards-selector-text"
               >
                 {totalQuantitat.map(value => (
                   <option className="cards-selector-text" key={value} value={value}>{value}</option>
                 ))}
               </Select>
+              <div className="cards-selector-label">Formats:</div>
               <Select
                 native
                 value={this.state.tipus}
-                onChange={""}
+                onChange={this.handleChange('tipus')}
                 className="cards-selector-text"
               >
-                {formats.map((value, index) => (
+                {producte.formats.map((value, index) => (
                   <option className="cards-selector-text" key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
                 ))}
               </Select>
             </div>
           </CardContent>
           <CardActions>
-            <Button size="small" color="primary">
-              Share
-            </Button>
-            <Button size="small" color="primary">
-              Learn More
-            </Button>
+            <IconButton
+              style={{ marginLeft: 'auto'}}
+              size="large"
+              onClick={() => {
+                this.handleDialogForm({ openDialogCart: true });
+              }}
+              color="default"
+              component="span"
+            >
+              <ShoppingCartIcon style={{ color: 'black', fontSize: 28 }} />
+            </IconButton>
           </CardActions>
         </Card>
+        <DialogForm
+          submitForm={this.handleAddCart.bind(this)}
+          handleClose={() => {
+            this.handleDialogForm({ openDialogCart: false });
+          }}
+          open={this.state.openDialogCart}
+          item={producte}
+          selected={{
+            quantitat: !this.state.quantitat ? 1 : this.state.quantitat,
+            tipus: !this.state.tipus ? producte.formats[0]: producte.formats[this.state.tipus],
+          }}
+        />
       </div>
     );
   }
@@ -92,4 +145,14 @@ SimpleMediaCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleMediaCard);
+const mapStateToProps = (state) => {
+  const { favorites, ts, cart } = state.user;
+  return { favorites, ts, cart };
+}
+
+export default compose(
+  withStyles(null, {
+    name: 'SimpleMediaCard',
+  }),
+  connect(mapStateToProps, { addFavorites, addToCart }),
+)(SimpleMediaCard);

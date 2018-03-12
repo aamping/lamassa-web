@@ -6,30 +6,14 @@ import LoginForm from '../components/LoginForm';
 import { login } from '../actions/authActions';
 import { authErrors, isAuthenticated } from '../reducers';
 
-const styles = {
-  content: {
-    width: '100%',
-    flexGrow: 1,
-    backgroundColor: '#f7ecb5',
-    paddingTop: 24,
-    // height: 'calc(100% - 56px)',
-    marginTop: 56,
-    // [theme.breakpoints.up('sm')]: {
-    //   height: 'calc(100% - 64px)',
-    //   marginTop: 64,
-    // },
-    overflow: 'hidden',
-  },
-};
-
 const LoginScreen = (props) => {
   if (props.isAuthenticated) {
     return (
-      <Redirect to="/" />
+      <Redirect to={props.location.state.from} />
     );
   }
   return (
-    <div style={styles.content}>
+    <div className="container-screen">
       <LoginForm {...props} />
     </div>
   );

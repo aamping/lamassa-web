@@ -14,6 +14,7 @@ const styles = {
     position: 'relative',
     display: 'flex',
     width: '-webkit-fill-available',
+    minHeight: '-webkit-fill-available',
     // height: '100%',
   },
   appScreens: {
@@ -29,18 +30,20 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
     return (
       <div style={styles.appFrame}>
         <DrawerBar />
-        <Switch style={styles.appScreens}>
-          <Route path="/cart" component={CartScreen} />
-          <Route path="/preferits" component={PreferScreen} />
-          <Route path="/producte$:product" component={ProducteScreen} />
-          <Route path="/" component={ListScreen} />
-        </Switch>
+        <div className="container-screen">
+          <Switch>
+            <Route path="/cart" component={CartScreen} />
+            <Route path="/preferits" component={PreferScreen} />
+            <Route path="/producte/:product" component={ProducteScreen} />
+            <Route path="/" component={ListScreen} />
+          </Switch>
+        </div>
       </div>
     );
   } return (
     <Redirect to={{
       pathname: '/login',
-      state: { from: '' },
+      state: { from: rest.location.pathname },
     }}
     />
   );

@@ -33,6 +33,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    backgroundColor: '#90ae68',
   },
   drawerInner: {
     // Make the items inside not wrap when transitioning:
@@ -44,6 +45,7 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
+    minHeight: '30px !important',
   },
 });
 
@@ -81,6 +83,9 @@ class DrawerBar extends Component {
         <Hidden mdUp>
           <Drawer
             type="persistent"
+            classes={{
+              paper: classNames(classes.drawerPaper),
+            }}
             open={open}
           >
             <div className={classes.drawerInner}>
@@ -99,8 +104,6 @@ class DrawerBar extends Component {
     );
   }
 }
-
-//         <Hidden smDown>
 
 DrawerBar.propTypes = {
   classes: PropTypes.object.isRequired,

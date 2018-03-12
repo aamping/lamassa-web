@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles } from 'material-ui/styles';
@@ -8,61 +7,52 @@ import Hidden from 'material-ui/Hidden';
 import SearchApp from '../components/SearchApp';
 import MediaCard from '../components/MediaCard';
 import CategoriesBar from '../components/CategoriesBar';
+import { fetchList } from '../actions/apiActions';
 
-const styles = theme => ({
-  content: {
-    width: 'inherit',
-    // flexGrow: 1,
-    paddingTop: 24,
-    marginTop: 56,
-    marginLeft: 0,
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: 54,
-    },
-    // overflow: 'hidden',
-  },
-});
-
-
-function ListScreen(props) {
-  const { classes, data } = props;
-  return (
-    <div style={{ width: '-webkit-fill-available' }}>
-      <main className={classes.content}>
-        <SearchApp />
-        <Grid
-          container
-        >
-          <Hidden smDown>
-            <Grid item md={1} lg={2}>
-              <Hidden mdDown>
-                <CategoriesBar />
-              </Hidden>
+class ListScreen extends Component {
+  componentWillMount() {
+    this.props.fetchList();
+  }
+  render() {
+    const { data, productors, etiquetes } = this.props;
+    return (
+      <div style={{ width: '-webkit-fill-available' }}>
+        <main>
+          <SearchApp />
+          <Grid
+            container
+            spacing={0}
+          >
+            <Hidden smDown>
+              <Grid item md={1} lg={2}>
+                <Hidden mdDown>
+                  <CategoriesBar etiquetes={etiquetes} />
+                </Hidden>
+              </Grid>
+            </Hidden>
+            <Grid item xs={12} sm={12} md={10} lg={10}>
+              <MediaCard
+                data={data}
+                productors={productors}
+                etiquetes={etiquetes}
+              />
             </Grid>
-          </Hidden>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
-            <MediaCard data={data} />
           </Grid>
-        </Grid>
-      </main>
-    </div>
-  );
+        </main>
+      </div>
+    );
+  }
 }
 
-ListScreen.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = ({ api }) => {
-  const { filteredMessages } = api;
-  return { data: filteredMessages };
+  const { filteredMessages, productors, etiquetes } = api;
+  return { data: filteredMessages, productors, etiquetes };
 };
 
 export default compose(
-  withStyles(styles, {
+  withStyles(null, {
     withTheme: true,
     name: 'ListScreen',
   }),
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, { fetchList }),
 )(ListScreen);

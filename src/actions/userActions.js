@@ -19,10 +19,8 @@ export const addFavorites = ({ favorites, itemPk }) => {
 
 export const addToCart = (item, comanda, cart) => {
   const { pk } = item;
-  let pos = false;
-  const exist = cart.map((value, index) => {
+  const exist = cart.map((value) => {
     if (value.item.pk === pk) {
-      pos = index;
       return true;
     }
     return false;

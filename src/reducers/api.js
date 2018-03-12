@@ -4,18 +4,25 @@ import * as api from '../actions/apiActions';
 const initialState = {
   message: [],
   filteredMessages: [],
-  reviewProduct: {},
+  reviewedProduct: {},
+  productors: [],
+  etiquetes: [],
 };
 
 const KEYS_TO_FILTERS = ['nom', 'text'];
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case api.FETCH_SUCCESS:
+    case api.FETCH_SUCCESS: {
+      const { productes, formats, productors, etiquetes } = action.payload;
+      const newProductes = mergeFormatsProductes(productes, formats);
       return {
-        message: action.payload ? action.payload : [],
-        filteredMessages: action.payload ? action.payload : [],
+        message: newProductes,
+        filteredMessages: newProductes,
+        productors,
+        etiquetes,
       };
+    }
     case api.SEARCH_UPDATED:
       return {
         ...state,
@@ -26,7 +33,7 @@ export default (state = initialState, action) => {
       let oldArray = [];
       if (action.payload.join()) {
         action.payload.map((value) => {
-          const newArray = state.message.filter(createFilter(value, ['etiqueta.nom']));
+          const newArray = state.message.filter(createFilter(`${value.pk}`, ['etiqueta']));
           msgs = oldArray.concat(newArray);
           oldArray = msgs;
           return null;
@@ -37,16 +44,45 @@ export default (state = initialState, action) => {
         filteredMessages: msgs,
       };
     }
-    case api.REVIEW_PRODUCT: {
-      const reviewProduct = state.message.filter(createFilter(action.payload.toString(), ['pk']));
-      const productsProducer = state.message.filter(createFilter(reviewProduct[0].productor.id.toString(), ['productor.id']));
+    case api.FETCH_PRODUCT_REQUEST: {
       return {
         ...state,
-        reviewProduct: reviewProduct[0],
+        reviewedProductPk: action.payload,
+      };
+    }
+    case api.FETCH_PRODUCT_SUCCESS: {
+      const { productes, productors, etiquetes } = action.payload;
+      const reviewedProduct = productes.filter(createFilter(state.reviewedProductPk, ['pk']));
+      const productsProducer = productes.filter(createFilter(`${reviewedProduct[0].productor}`, ['productor']));
+      return {
+        ...state,
+        reviewedProduct: reviewedProduct[0],
         productsProducer,
+        message: action.payload ? action.payload.productes : [],
+        filteredMessages: action.payload ? action.payload.productes : [],
+        productors,
+        etiquetes,
       };
     }
     default:
       return state;
   }
+};
+
+const mergeFormatsProductes = (productes, formats) => {
+  const newProductes = productes;
+  productes.map((value, index) => {
+    const newFormats = [];
+    value.formats.map((val) => {
+      formats.find((obj) => {
+        if (obj.pk === val) {
+          newFormats.push(obj);
+        } return null;
+      });
+      return null;
+    });
+    newProductes[index] = { ...productes[index], formats: newFormats };
+    return null;
+  });
+  return newProductes;
 };

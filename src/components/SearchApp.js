@@ -6,9 +6,9 @@ import { ListItemIcon, ListItemText } from 'material-ui/List';
 import { connect } from 'react-redux';
 import Hidden from 'material-ui/Hidden';
 
-import { fetchList, searchUpdated, categoryUpdated } from '../actions/apiActions';
-import categories from '../data/categories.json';
+import { searchUpdated, categoryUpdated } from '../actions/apiActions';
 
+const url = 'http://localhost:8000';
 
 const styles = {
   searchBar: {
@@ -27,16 +27,12 @@ class SearchApp extends Component {
       searchTerm: '',
       categoryTerm:
         {
-          name: '',
+          nom: '',
           img: ''
         },
       anchorEl: null
     };
     this.searchUpdated = this.searchUpdated.bind(this);
-  }
-
-  componentDidMount() {
-      this.props.fetchList();
   }
 
   handleClick = event => {
@@ -49,7 +45,7 @@ class SearchApp extends Component {
 
   handleMenuItemClick = (event, value) => {
     this.setState({ anchorEl: null });
-    this.props.categoryUpdated({ term: value.name });
+    this.props.categoryUpdated({ term: [value] });
   };
 
   renderButtonCategory(category) {
@@ -70,6 +66,7 @@ class SearchApp extends Component {
   }
 
   renderMenuCategory(anchorEl) {
+    const { etiquetes } = this.props;
     return(
       <div>
         <Hidden lgUp>
@@ -89,18 +86,17 @@ class SearchApp extends Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          {categories.map(value => (
-            <div key={value.name}>
-              { value.name ?
+          <MenuItem onClick={event => this.handleMenuItemClick(event, [])}>
+            <ListItemText primary={'Totes Categories'} />
+          </MenuItem>
+          {etiquetes.map(value => (
+            <div key={value.nom}>
               <MenuItem onClick={event => this.handleMenuItemClick(event, value)}>
                 <ListItemIcon>
-                  <img alt='' src={value.img} />
+                  <img alt='' src={url + value.img} />
                 </ListItemIcon>
-                <ListItemText inset primary={value.name} />
+                <ListItemText inset primary={value.nom} />
               </MenuItem>
-              : <MenuItem onClick={event => this.handleMenuItemClick(event, value)}>
-                  <ListItemText primary={'Totes Categories'} />
-                </MenuItem> }
             </div>
           ))}
         </Menu>
@@ -128,9 +124,9 @@ class SearchApp extends Component {
 }
 
 
-const mapStateToProps = ({ api, user}) => {
-  const { filteredMessages } = api;
-  return { filteredMessages };
+const mapStateToProps = ({ api }) => {
+  const { filteredMessages, etiquetes } = api;
+  return { filteredMessages, etiquetes };
 };
 
-export default connect(mapStateToProps, { fetchList, searchUpdated, categoryUpdated })(SearchApp);
+export default connect(mapStateToProps, { searchUpdated, categoryUpdated })(SearchApp);

@@ -8,20 +8,16 @@ import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import ShoppingCartIcon from 'material-ui-icons/ShoppingCart';
-import ShareIcon from 'material-ui-icons/Share';
 import MessageIcon from 'material-ui-icons/Message';
 import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import Select from 'material-ui/Select';
-import { FormControl } from 'material-ui/Form';
 import { ListItemIcon } from 'material-ui/List';
 import StarRatingComponent from 'react-star-rating-component';
 import { addFavorites } from '../actions/userActions';
 import { addToCart } from '../actions/userActions';
-import { reviewProduct } from '../actions/apiActions';
 import DialogForm from './DialogForm';
-import './MediaCard.css';
 
 const totalQuantitat = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -67,7 +63,7 @@ const styles = theme => ({
   }
 });
 
-const url = 'https://lamassa.org';
+const url = 'http://localhost:8000';
 
 class MediaCard extends Component {
   componentWillMount() {
@@ -99,9 +95,8 @@ class MediaCard extends Component {
     const { cart } = this.props;
     this.props.addToCart(item, comanda, cart);
   }
-// <CardActions disableActionSpacing>
   render() {
-    const { classes, data, favorites, isFavorites } = this.props;
+    const { classes, data, favorites, isFavorites, productors, etiquetes } = this.props;
     return (
       <Grid container
         alignItems={'center'}
@@ -110,6 +105,8 @@ class MediaCard extends Component {
         justify={'center'}
       >
       {data.map((value, index) => {
+        const productor = productors.find((obj) => obj.id === value.productor);
+        const etiqueta = etiquetes.find(obj => obj.pk === value.etiqueta);
         if (!isFavorites || favorites.includes(value.pk)) {
           return (
             <Grid className={classes.gridItem} item key={value.nom}>
@@ -119,13 +116,12 @@ class MediaCard extends Component {
                   action={
                     <div>
                     <div>
+                      <IconButton>
+                      </IconButton>
                       <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
                         <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#da6d76' } : {color: '#c4d97e' }} />
                       </IconButton>
-                      <IconButton aria-label="Share">
-                        <ShareIcon />
-                      </IconButton>
-                      </div>
+                    </div>
                     <div style={{ fontSize: 20 }}>
                       <StarRatingComponent
                         name="rate"
@@ -138,20 +134,20 @@ class MediaCard extends Component {
                   }
                   title={
                     <div className="title-cards">
-                      <Link className="cards-title" onClick={() => this.props.reviewProduct({term: value.pk})} to={`/producte$${value.pk}`}>{value.nom}</Link>
+                      <Link className="cards-title" to={`/producte/${value.pk}`}>{value.nom}</Link>
                       <ListItemIcon>
-                        <img style={{ marginLeft: 10 }} alt='' src={url+value.etiqueta.img} />
+                        <img style={{ marginLeft: 10 }} alt='' src={url+etiqueta.img} />
                       </ListItemIcon>
                     </div>
                   }
                   subheader={
                     <div style={{ display: 'flex' }}>
-                      <Typography type='button'><a className="cards-subtitle" href="http://www.yahoo.com"> {value.productor.nom}</a></Typography>
+                      <Typography type='button'><a className="cards-subtitle" href="http://www.yahoo.com"> {productor.nom}</a></Typography>
                       <MessageIcon style={{ marginLeft: 10 }}/>
                     </div>
                   }
                 />
-                <div className='media-container'>
+                <div className='cards-media-container'>
                   <img alt='' src={url+value.thumb} href={url + value.foto} className="cards-image"/>
                   <CardContent>
                     <div className="cards-text">
@@ -159,22 +155,24 @@ class MediaCard extends Component {
                     </div>
                   </CardContent>
                 </div>
-                <div className={classes.formControl, "form-card-select-product"}>
+                <div className={(classes.formControl, "form-card-select-product")}>
+                  <div className="cards-selector-label">Quant:</div>
                   <Select
                     native
                     value={this.state.quantitat[index]}
                     onChange={this.handleChange('quantitat', index)}
-                    className={classes.selectEmpty, "cards-selector-text"}
+                    className={(classes.selectEmpty, "cards-selector-text")}
                   >
                     {totalQuantitat.map(value => (
                       <option className="cards-selector-text" key={value} value={value}>{value}</option>
                     ))}
                   </Select>
+                  <div className="cards-selector-label">Format:</div>
                   <Select
                     native
                     value={this.state.tipus[index]}
                     onChange={this.handleChange('tipus', index)}
-                    className={classes.selectEmpty, "cards-selector-text"}
+                    className={(classes.selectEmpty, "cards-selector-text")}
                   >
                     {value.formats.map((value, index) => (
                       <option className="cards-selector-text" key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
@@ -229,5 +227,5 @@ export default compose(
   withStyles(styles, {
     name: 'MediaCard',
   }),
-  connect(mapStateToProps, { addFavorites, addToCart, reviewProduct }),
+  connect(mapStateToProps, { addFavorites, addToCart }),
 )(MediaCard);

@@ -15,14 +15,14 @@ import { addToCart, addFavorites } from '../actions/userActions';
 class SimpleMediaCard extends Component {
   state = {
     quantitat: 0,
-    tipus: "",
+    tipus: '',
     openDialogCart: false,
-  }
-  handleChange = (name) => event => {
+  };
+  handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
-  }
+  };
   handleDialogForm({ openDialogCart }) {
     this.setState({ openDialogCart });
   }
@@ -37,7 +37,6 @@ class SimpleMediaCard extends Component {
   render() {
     const totalQuantitat = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const { producte, favorites } = this.props;
-    console.log(producte);
     return (
       <div>
         <Card className="card-review-product">

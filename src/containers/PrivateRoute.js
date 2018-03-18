@@ -8,6 +8,7 @@ import ListScreen from './ListScreen';
 import PreferScreen from './PreferScreen';
 import CartScreen from './CartScreen';
 import ProducteScreen from './ProducteScreen';
+import UserProfileScreen from './UserProfileScreen';
 
 const styles = {
   appFrame: {
@@ -34,17 +35,20 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
           <Switch>
             <Route path="/cart" component={CartScreen} />
             <Route path="/preferits" component={PreferScreen} />
+            <Route path="/userprofile" component={UserProfileScreen} />
             <Route path="/producte/:product" component={ProducteScreen} />
             <Route path="/" component={ListScreen} />
           </Switch>
         </div>
       </div>
     );
-  } return (
-    <Redirect to={{
-      pathname: '/login',
-      state: { from: rest.location.pathname },
-    }}
+  }
+  return (
+    <Redirect
+      to={{
+        pathname: '/login',
+        state: { from: rest.location.pathname },
+      }}
     />
   );
 };

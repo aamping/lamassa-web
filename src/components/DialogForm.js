@@ -6,7 +6,7 @@ import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,// eslint-disable-next-line
+  DialogTitle, // eslint-disable-next-line
   withMobileDialog,
 } from 'material-ui/Dialog';
 
@@ -20,7 +20,7 @@ const styles = {
     maxHeight: 200,
     padding: 30,
   },
-}
+};
 
 class DialogForm extends Component {
   state = {
@@ -41,7 +41,7 @@ class DialogForm extends Component {
     this.setState({
       [name]: event.target.value,
     });
-  }
+  };
 
   render() {
     const { fullScreen, handleClose, open, item, selected } = this.props;
@@ -58,7 +58,7 @@ class DialogForm extends Component {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">{"Nova Comanda: "}</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">{'Nova Comanda: '}</DialogTitle>
         <DialogContent>
           <DialogContentText />
           <div style={styles.containerTextImg}>
@@ -78,7 +78,7 @@ class DialogForm extends Component {
                 id="tipus"
                 label="Format:"
                 type="tipus"
-                value={selected.tipus ? (selected.tipus.nom + ` (${selected.tipus.preu} €)`) : null}
+                value={selected.tipus ? selected.tipus.nom + ` (${selected.tipus.preu} €)` : null}
               />
               <TextField
                 autoFocus
@@ -96,15 +96,12 @@ class DialogForm extends Component {
                 label="Preu Total:"
                 type="preu"
                 fullWidth
-                value={selected.tipus ? (selected.tipus.preu * selected.quantitat) : null}
+                value={selected.tipus ? selected.tipus.preu * selected.quantitat : null}
               />
             </div>
-            <img alt='' src='/item_espelta.jpg' style={styles.img} />
+            <img alt="" src="/item_espelta.jpg" style={styles.img} />
           </div>
-        <StepperCart
-          data={entrega}
-          submit={this.addCart}
-        />
+          <StepperCart data={entrega} submit={this.addCart} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -114,12 +111,12 @@ class DialogForm extends Component {
       </Dialog>
     );
   }
-  addCart = (entrega) => {
+  addCart = entrega => {
     const { item, selected } = this.props;
-    const comanda = { ...selected, ...entrega, preuTotal: (selected.tipus.preu * selected.quantitat) };
+    const comanda = { ...selected, ...entrega, preuTotal: selected.tipus.preu * selected.quantitat };
     this.props.submitForm(item, comanda);
     this.props.handleClose();
-  }
+  };
 }
 
 DialogForm.propTypes = {

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 
+import { Link } from 'react-router-dom';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -52,7 +53,7 @@ const styles = theme => ({
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 36,
+    marginRight: 15,
   },
   hide: {
     display: 'none',
@@ -128,7 +129,7 @@ class AppBarTitle extends Component {
                     open={openProfileMenu}
                     onClose={this.handleClose}
                   >
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <Link className="nohyperlink" to={`/userprofile`}><MenuItem onClick={this.handleClose}>Profile</MenuItem></Link>
                     <MenuItem onClick={this.handleClose}>My account</MenuItem>
                     <MenuItem onClick={this.handleLogout.bind(this)}>Desconectar</MenuItem>
                   </Menu>

@@ -16,6 +16,7 @@ import Select from 'material-ui/Select';
 import { ListItemIcon } from 'material-ui/List';
 import StarRatingComponent from 'react-star-rating-component';
 import { addFavorites } from '../actions/userActions';
+import { addRemoveItem } from '../actions/apiActions';
 import { addToCart } from '../actions/userActions';
 import DialogForm from './DialogForm';
 
@@ -96,7 +97,7 @@ class MediaCard extends Component {
     this.props.addToCart(item, comanda, cart);
   }
   render() {
-    const { classes, data, favorites, isFavorites, productors, etiquetes } = this.props;
+    const { classes, data, favorites, isFavorites } = this.props;
     return (
       <Grid container
         alignItems={'center'}
@@ -105,8 +106,6 @@ class MediaCard extends Component {
         justify={'center'}
       >
       {data.map((value, index) => {
-        const productor = productors.find((obj) => obj.id === value.productor);
-        const etiqueta = etiquetes.find(obj => obj.pk === value.etiqueta);
         if (!isFavorites || favorites.includes(value.pk)) {
           return (
             <Grid className={classes.gridItem} item key={value.nom}>
@@ -118,8 +117,8 @@ class MediaCard extends Component {
                     <div>
                       <IconButton>
                       </IconButton>
-                      <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
-                        <FavoriteIcon style={favorites.includes(value.pk) ? { color: '#da6d76' } : {color: '#c4d97e' }} />
+                      <IconButton onClick={() => this.handleAddFavorites(value.nom)} aria-label="Afegir a preferits">
+                        <FavoriteIcon style={favorites.includes(value.nom) ? { color: '#da6d76' } : {color: '#c4d97e' }} />
                       </IconButton>
                     </div>
                     <div style={{ fontSize: 20 }}>
@@ -136,13 +135,13 @@ class MediaCard extends Component {
                     <div className="title-cards">
                       <Link className="cards-title" to={`/producte/${value.pk}`}>{value.nom}</Link>
                       <ListItemIcon>
-                        <img style={{ marginLeft: 10 }} alt='' src={url+etiqueta.img} />
+                        <img style={{ marginLeft: 10 }} alt='' src={url+value.etiqueta.img} />
                       </ListItemIcon>
                     </div>
                   }
                   subheader={
                     <div style={{ display: 'flex' }}>
-                      <Typography type='button'><a className="cards-subtitle" href="http://www.yahoo.com"> {productor.nom}</a></Typography>
+                      <Typography type='button'><a className="cards-subtitle" href="http://www.yahoo.com"> {value.productora.nom}</a></Typography>
                       <MessageIcon style={{ marginLeft: 10 }}/>
                     </div>
                   }
@@ -174,7 +173,7 @@ class MediaCard extends Component {
                     onChange={this.handleChange('tipus', index)}
                     className={(classes.selectEmpty, "cards-selector-text")}
                   >
-                    {value.formats.map((value, index) => (
+                    {value.formats_dis.map((value, index) => (
                       <option className="cards-selector-text" key={value.nom} value={index}>{value.preu + ' € - ' + value.nom}</option>
                     ))}
                   </Select>
@@ -202,7 +201,7 @@ class MediaCard extends Component {
                     item={value}
                     selected={{
                       quantitat: !this.state.quantitat[index] ? 1 : this.state.quantitat[index],
-                      tipus: !this.state.tipus[index] ? value.formats[0]: value.formats[this.state.tipus[index]],
+                      tipus: !this.state.tipus[index] ? value.formats_dis[0]: value.formats_dis[this.state.tipus[index]],
                     }}
                   />
                 </CardActions>
@@ -219,13 +218,17 @@ MediaCard.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { favorites, ts, cart } = state.user;
-  return { favorites, ts, cart };
+  const { ts, cart } = state.user;
+  return {
+    favorites: state.user.user.preferits,
+    ts,
+    cart,
+  };
 }
 
 export default compose(
   withStyles(styles, {
     name: 'MediaCard',
   }),
-  connect(mapStateToProps, { addFavorites, addToCart }),
+  connect(mapStateToProps, { addFavorites, addToCart, addRemoveItem }),
 )(MediaCard);

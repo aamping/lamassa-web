@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@appbaseio/reactivesearch": "^2.1.0",
+    "babel-eslint": "^8.2.2",
     "classnames": "^2.2.5",
     "eslint": "^4.18.2",
     "eslint-config-prettier": "^2.9.0",
@@ -21,6 +22,7 @@
     "react-autosuggest": "^9.3.2",
     "react-dom": "^16.2.0",
     "react-form-validator-core": "^0.4.1",
+    "react-google-maps": "^9.4.5",
     "react-material-ui-form-validator": "^2.0.0-beta.3",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

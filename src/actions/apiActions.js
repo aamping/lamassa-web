@@ -41,6 +41,20 @@ export const fetchProduct = ({ term }) => ({
   },
 });
 
+
+export const addRemoveItem = () => ({
+  [RSAA]: {
+    endpoint: 'http://127.0.0.1:8000/api/auth/example',
+    method: 'POST',
+    headers: withAuth({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({
+      firstParam: 'yourValue',
+      // secondParam: 'yourOtherValue',
+    }),
+    types: [FETCH_REQUEST, FETCH_SUCCESS, FETCH_FAILURE],
+  },
+});
+
 export const searchUpdated = ({ term }) => ({
   type: SEARCH_UPDATED,
   payload: term,

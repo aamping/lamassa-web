@@ -66,10 +66,12 @@ const DrawerIcons = (props) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  cart: user.cart,
-  favorites: user.favorites,
-  ts: user.ts,
-});
+const mapStateToProps = ({ user }) => {
+  return {
+    cart: user.cart,
+    favorites: user.user.preferits,
+    ts: user.ts,
+  };
+};
 
 export default connect(mapStateToProps, null)(DrawerIcons);

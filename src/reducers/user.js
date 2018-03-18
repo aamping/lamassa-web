@@ -1,11 +1,13 @@
 import * as user from '../actions/userActions';
 import * as auth from '../actions/authActions';
+import * as api from '../actions/apiActions';
 
 const initialState = {
   favorites: [],
   ts: 0,
   open: false,
   cart: [],
+  nodes: [],
 };
 
 export default (state = initialState, action) => {
@@ -14,7 +16,10 @@ export default (state = initialState, action) => {
     case user.ADD_FAVORITES:
       return {
         ...state,
-        favorites: action.payload,
+        user: {
+          ...state.user,
+          preferits: action.payload,
+        },
         ts: (new Date()).getTime(),
       };
     case user.ADD_CART:
@@ -39,6 +44,15 @@ export default (state = initialState, action) => {
         ...state,
         user: action.payload.user,
       };
+    case api.FETCH_SUCCESS: {
+      const { user_profile, nodes } = action.payload;
+      // const newProductes = mergeFormatsProductes(productes, formats);
+      return {
+        ...state,
+        user: user_profile[0],
+        nodes,
+      };
+    }
     default:
       return state;
   }

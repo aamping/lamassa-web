@@ -1,4 +1,4 @@
-import {createFilter} from 'react-search-input';
+import { createFilter } from 'react-search-input';
 import * as api from '../actions/apiActions';
 
 const initialState = {
@@ -14,11 +14,11 @@ const KEYS_TO_FILTERS = ['nom', 'text'];
 export default (state = initialState, action) => {
   switch (action.type) {
     case api.FETCH_SUCCESS: {
-      const { productes, formats, productors, etiquetes } = action.payload;
-      const newProductes = mergeFormatsProductes(productes, formats);
+      const { productes, productors, etiquetes } = action.payload;
+      // const newProductes = mergeFormatsProductes(productes, formats);
       return {
-        message: newProductes,
-        filteredMessages: newProductes,
+        message: productes,
+        filteredMessages: productes,
         productors,
         etiquetes,
       };
@@ -32,7 +32,7 @@ export default (state = initialState, action) => {
       let msgs = state.message;
       let oldArray = [];
       if (action.payload.join()) {
-        action.payload.map((value) => {
+        action.payload.map(value => {
           const newArray = state.message.filter(createFilter(`${value.pk}`, ['etiqueta']));
           msgs = oldArray.concat(newArray);
           oldArray = msgs;
@@ -52,12 +52,14 @@ export default (state = initialState, action) => {
     }
     case api.FETCH_PRODUCT_SUCCESS: {
       const { productes, productors, etiquetes } = action.payload;
-      const reviewedProduct = productes.filter(createFilter(state.reviewedProductPk, ['pk']));
-      const productsProducer = productes.filter(createFilter(`${reviewedProduct[0].productor}`, ['productor']));
+      const filteredProduct = productes.filter(createFilter(state.reviewedProductPk, ['pk']));
+      // const reviewedProduct = mergeFormatsProduct(filteredProduct[0], formats);
+      const filteredProductsProducer = productes.filter(createFilter(`${filteredProduct[0].productora.nom}`, ['productora.nom']));
+      // const productsProducer = mergeFormatsProductes(filteredProductsProducer, formats);
       return {
         ...state,
-        reviewedProduct: reviewedProduct[0],
-        productsProducer,
+        reviewedProduct: filteredProduct[0],
+        productsProducer: filteredProductsProducer,
         message: action.payload ? action.payload.productes : [],
         filteredMessages: action.payload ? action.payload.productes : [],
         productors,
@@ -68,21 +70,36 @@ export default (state = initialState, action) => {
       return state;
   }
 };
-
-const mergeFormatsProductes = (productes, formats) => {
-  const newProductes = productes;
-  productes.map((value, index) => {
-    const newFormats = [];
-    value.formats.map((val) => {
-      formats.find((obj) => {
-        if (obj.pk === val) {
-          newFormats.push(obj);
-        } return null;
-      });
-      return null;
-    });
-    newProductes[index] = { ...productes[index], formats: newFormats };
-    return null;
-  });
-  return newProductes;
-};
+//
+// export const mergeFormatsProductes = (productes, formats) => {
+//   const newProductes = [];
+//   productes.map((value, index) => {
+//     const newFormats = [];
+//     value.formats.map(val => {
+//       formats.find(obj => {
+//         if (obj.pk === val) {
+//           newFormats.push(obj);
+//         }
+//         return null;
+//       });
+//       return null;
+//     });
+//     newProductes[index] = { ...productes[index], formats: newFormats };
+//     return null;
+//   });
+//   return newProductes;
+// };
+//
+// export const mergeFormatsProduct = (producte, formats) => {
+//   const newFormats = [];
+//   producte.formats.map(val => {
+//     formats.find(obj => {
+//       if (obj.pk === val) {
+//         newFormats.push(obj);
+//       }
+//       return null;
+//     });
+//     return null;
+//   });
+//   return { ...producte, formats: newFormats };
+// };

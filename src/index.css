@@ -1,3 +1,7 @@
+* {
+  font-family: 'Playfair Display';
+}
+
 body {
   margin: 0px;
 }
@@ -200,4 +204,61 @@ body {
 
 .search-input > input:focus {
   outline: none;
+}
+
+.userprofile-card {
+  width: fit-content !important;
+  background-color: #ebf9d6 !important;
+}
+
+.userprofile-avatar {
+  width: 200px !important;
+  height: 200px !important;
+  margin: auto;
+}
+
+.userprofile-avatar-container {
+}
+
+.userprofile-input {
+  margin-left: 10px;
+}
+
+.userprofile-text {
+  font-size: 16px;
+  padding: 10px !important;
+}
+
+@media (max-width: 768px) {
+  .userprofile-text {
+    padding: 0px !important;
+  }
+}
+
+.userprofile-input {
+  font-size: 14px;
+}
+
+.userprofile-inputcell {
+  padding: 0px !important;
+      max-width: 180px;
+}
+
+.userprofile-editar {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .userprofile-editar {
+    font-size: 12px;
+    padding: 10px !important;
+  }
+  .userprofile-editar-button {
+  }
+}
+
+.nohyperlink {
+  text-decoration: none !important;
+  color: black !important;
 }

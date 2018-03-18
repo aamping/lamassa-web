@@ -159,3 +159,12 @@ body {
   height: 21px;
   width: 21px;
 }
+
+.nohyperlink {
+  text-decoration: none !important;
+  color: black !important;
+}
+
+.userprofile-card {
+  width: fit-content !important;
+}

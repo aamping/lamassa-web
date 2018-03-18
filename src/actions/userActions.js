@@ -1,3 +1,9 @@
+import { RSAA } from 'redux-api-middleware';
+import { withAuth } from '../reducers';
+
+export const POST_REQUEST = '@@user/POST_REQUEST';
+export const POST_SUCCESS = '@@user/POST_SUCCESS';
+export const POST_FAILURE = '@@user/POST_FAILURE';
 
 export const ADD_FAVORITES = '@@user/ADD_FAVORITES';
 export const HANDLE_DRAWER = '@@user/HANDLE_DRAWER';
@@ -12,8 +18,40 @@ export const addFavorites = ({ favorites, itemPk }) => {
     favorites.push(itemPk);
   }
   return {
-    type: ADD_FAVORITES,
-    payload: favorites,
+    [RSAA]: {
+      endpoint: 'http://127.0.0.1:8000/api/auth/example',
+      method: 'POST',
+      headers: withAuth({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        preferits: `${itemPk}`,
+      }),
+      types: [
+        {
+          type: ADD_FAVORITES,
+          payload: favorites,
+        },
+        POST_SUCCESS,
+        POST_FAILURE,
+      ],
+    },
+  };
+  // return {
+  //   type: ADD_FAVORITES,
+  //   payload: favorites,
+  // };
+};
+
+export const postChanges = ({ prop, value }) => {
+  return {
+    [RSAA]: {
+      endpoint: 'http://127.0.0.1:8000/api/auth/example',
+      method: 'POST',
+      headers: withAuth({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        [prop]: `${value}`,
+      }),
+      types: [POST_REQUEST, POST_SUCCESS, POST_FAILURE],
+    },
   };
 };
 

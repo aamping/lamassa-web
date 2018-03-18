@@ -48,7 +48,7 @@ export const postChanges = ({ prop, value }) => {
       method: 'POST',
       headers: withAuth({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
-        [prop]: `${value}`,
+        [prop]: value,
       }),
       types: [POST_REQUEST, POST_SUCCESS, POST_FAILURE],
     },
@@ -57,7 +57,7 @@ export const postChanges = ({ prop, value }) => {
 
 export const addToCart = (item, comanda, cart) => {
   const { pk } = item;
-  const exist = cart.map((value) => {
+  const exist = cart.map(value => {
     if (value.item.pk === pk) {
       return true;
     }

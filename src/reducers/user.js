@@ -8,6 +8,7 @@ const initialState = {
   open: false,
   cart: [],
   nodes: [],
+  historial: [],
 };
 
 export default (state = initialState, action) => {
@@ -45,12 +46,13 @@ export default (state = initialState, action) => {
         user: action.payload.user,
       };
     case api.FETCH_SUCCESS: {
-      const { user_profile, nodes } = action.payload;
+      const { user_profile, nodes, historial } = action.payload;
       // const newProductes = mergeFormatsProductes(productes, formats);
       return {
         ...state,
         user: user_profile[0],
         nodes,
+        historial,
       };
     }
     default:

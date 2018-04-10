@@ -19,7 +19,7 @@ export const addFavorites = ({ favorites, itemPk }) => {
   }
   return {
     [RSAA]: {
-      endpoint: 'http://127.0.0.1:8000/api/auth/example',
+      endpoint: 'http://aamping.pythonanywhere.com/api/auth/example',
       method: 'POST',
       headers: withAuth({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
@@ -44,7 +44,7 @@ export const addFavorites = ({ favorites, itemPk }) => {
 export const postChanges = ({ prop, value }) => {
   return {
     [RSAA]: {
-      endpoint: 'http://127.0.0.1:8000/api/auth/example',
+      endpoint: 'http://aamping.pythonanywhere.com/api/auth/example',
       method: 'POST',
       headers: withAuth({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({

@@ -23,7 +23,7 @@ export const addFavorites = ({ favorites, itemPk }) => {
       method: 'POST',
       headers: withAuth({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
-        preferits: `${itemPk}`,
+        preferits: itemPk,
       }),
       types: [
         {

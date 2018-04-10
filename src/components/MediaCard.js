@@ -111,12 +111,9 @@ class MediaCard extends Component {
                       <div>
                         <div>
                           <IconButton />
-                          <IconButton
-                            onClick={() => this.handleAddFavorites(value.nom)}
-                            aria-label="Afegir a preferits"
-                          >
+                          <IconButton onClick={() => this.handleAddFavorites(value.pk)} aria-label="Afegir a preferits">
                             <FavoriteIcon
-                              style={favorites.includes(value.nom) ? { color: '#da6d76' } : { color: '#c4d97e' }}
+                              style={favorites.includes(value.pk) ? { color: '#da6d76' } : { color: '#c4d97e' }}
                             />
                           </IconButton>
                         </div>

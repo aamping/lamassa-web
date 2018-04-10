@@ -262,3 +262,50 @@ body {
   text-decoration: none !important;
   color: black !important;
 }
+
+.dialog-calendar-paper {
+  width: 100% !important;
+  max-width: 900px;
+}
+
+.calendar-app {
+  display: flex;
+}
+
+.react-calendar {
+  width: 250px !important;
+}
+
+.react-calendar__tile {
+  font-size: 10px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-size: 10px;
+}
+
+.calendar-container {
+  padding: 10px;
+}
+
+
+.calendar-month {
+  text-align: center;
+  font-size: 18px;
+}
+
+.calendar-tile-active {
+  background: #006edc !important;
+}
+
+.calendar-tile-holiday {
+  background: red !important;
+}
+
+.calendar-controlpanel {
+  display: flex;
+}
+
+.calendar-control {
+  padding: 10px;
+}

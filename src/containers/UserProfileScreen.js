@@ -34,8 +34,7 @@ class UserProfileScreen extends Component {
   }
 
   render() {
-    const { avatar, bio, carrer, invitacions, lloc_entrega, numero, phone_number, pis, poblacio, user, historial } = this.props;
-    const direccio = `${carrer} ${numero} ${pis}`;
+    const { avatar, bio, carrer, invitacions, lloc_entrega, numero, phone_number, pis, poblacio, user, historial, direccio } = this.props;
     const direccioEntrega = `${lloc_entrega.carrer} ${lloc_entrega.numero} ${lloc_entrega.pis}`;
     const poblacioEntrega = `${lloc_entrega.poblacio} ${lloc_entrega.codi_postal}`;
     const splitString = lloc_entrega.position.split(',');
@@ -236,9 +235,10 @@ class UserProfileScreen extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {historial ? historial.map(value => (
+                  {historial ? (
+                    historial.map(value => (
                       <TableRow key={value.format.nom}>
-                        <TableCell className="userprofile-text">historial.nom</TableCell>
+                        <TableCell className="userprofile-text">{value.producte}</TableCell>
                         <TableCell className="userprofile-text">{value.format.nom}</TableCell>
                         <TableCell className="userprofile-text">{value.format.preu}</TableCell>
                         <TableCell className="userprofile-text">{value.cantitat}</TableCell>
@@ -247,9 +247,9 @@ class UserProfileScreen extends Component {
                         <TableCell className="userprofile-text">{value.data_comanda.split('T')[0]}</TableCell>
                       </TableRow>
                     ))
-                  : (
+                  ) : (
                     <TableRow>
-                      <TableCell className="userprofile-text">historial.nom</TableCell>
+                      <TableCell className="userprofile-text">Carregant dades...</TableCell>
                     </TableRow>
                   )}
                 </TableBody>

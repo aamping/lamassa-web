@@ -33,7 +33,7 @@ class LoginForm extends Component {
     event.preventDefault();
     this.props.onSubmit(email, password);
   }
-
+//, 'isEmail'
   render() {
     const { formData, submitted } = this.state;
     return (
@@ -44,12 +44,12 @@ class LoginForm extends Component {
         <Typography>Login</Typography>
         {/* eslint-enable no-unused-vars  */}
         <TextValidator
-          label="Email"
+          label="Email o Usuari"
           onChange={this.handleChange}
           name="email"
           value={formData.email}
-          validators={['required', 'isEmail']}
-          errorMessages={['Email és necessari', 'Email no és valid']}
+          validators={['required']}
+          errorMessages={['Email és necessari', 'Email o Usuarino és valid']}
         />
         <br />
         <TextValidator

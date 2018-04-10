@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { withStyles } from 'material-ui/styles';
 import Stepper, { Step, StepLabel } from 'material-ui/Stepper';
 import Button from 'material-ui/Button';
@@ -32,6 +33,13 @@ function getStepContent(stepIndex) {
       return 'Defecte';
   }
 }
+
+const frequencies = {
+  1: 'Una sola vegada',
+  2: 'Cada Setmana',
+  3: 'Cada 2 Setmanes',
+  4: 'Cada 4 Setmanes',
+};
 
 class StepperCart extends Component {
   state = {
@@ -76,6 +84,28 @@ class StepperCart extends Component {
     });
   }
 
+  handleChangeFrequencia = event => {
+    const { steps, activeStep } = this.state;
+    const key = parseInt(event.target.value, 10);
+    steps[activeStep] = frequencies[key];
+    this.setState({
+      steps,
+      frequencia: key,
+    });
+    this.props.onChangeFrequencia(key);
+  };
+
+  handleChangeDia = event => {
+    const { steps, activeStep } = this.state;
+    const stocksData = this.props.data.tipus.dies_stocks_futurs;
+    const key = parseInt(event.nativeEvent.target.value, 10);
+    steps[activeStep] = new Date(stocksData[key].dia).toDateString();
+    this.setState({
+      steps,
+      dia: stocksData[key],
+    });
+  };
+
   handleEmptySelection = () => {
     this.setState({
       error: 'red'
@@ -90,6 +120,7 @@ class StepperCart extends Component {
   render() {
     const { classes, data } = this.props;
     const { activeStep, steps } = this.state;
+    const stocksData = data.tipus.dies_stocks_futurs;
 
     return (
       <div className={classes.root}>
@@ -128,12 +159,13 @@ class StepperCart extends Component {
                   style={{ marginRight: 20 }}
                   native
                   fullWidth
-                  value={this.state.dia}
-                  onChange={this.handleChange('dia')}
+                  onChange={this.handleChangeDia}
                 >
                   <option value="" />
-                  {data.dia.map((value, index) => (
-                    <option key={value} value={value}>{value}</option>
+                  {_.map(stocksData, (value, key) => (
+                    <option key={value.dia} value={key}>
+                      {(new Date(value.dia)).toDateString()}
+                    </option>
                   ))}
                 </Select>
                 <Button raised color="primary" onClick={this.state.dia ? this.handleNext : this.handleEmptySelection}>
@@ -160,8 +192,10 @@ class StepperCart extends Component {
                   onChange={this.handleChange('hora')}
                 >
                   <option value="" />
-                  {data.hora.map((value, index) => (
-                    <option key={value} value={value}>{value}</option>
+                  {_.map(this.state.dia.franjes, value => (
+                    <option key={value.inici} value={`${value.inici} - ${value.final}`}>
+                      {`${value.inici} - ${value.final}`}
+                    </option>
                   ))}
                 </Select>
                 <Button raised color="primary" onClick={this.state.hora ? this.handleNext : this.handleEmptySelection}>
@@ -184,11 +218,11 @@ class StepperCart extends Component {
                   native
                   fullWidth
                   value={this.state.frequencia}
-                  onChange={this.handleChange('frequencia')}
+                  onChange={this.handleChangeFrequencia}
                 >
                   <option value="" />
-                  {data.frequencia.map((value, index) => (
-                    <option key={value} value={value}>{value}</option>
+                  {_.map(frequencies, (value, index) => (
+                    <option key={value} value={index}>{value}</option>
                   ))}
                 </Select>
                 <Button raised color="primary" onClick={this.state.frequencia ? this.handleNext : this.handleEmptySelection}>

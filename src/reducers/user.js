@@ -55,6 +55,11 @@ export default (state = initialState, action) => {
         historial,
       };
     }
+    case user.POST_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.user_profile,
+      };
     default:
       return state;
   }

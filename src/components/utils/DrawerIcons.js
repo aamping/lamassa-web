@@ -26,7 +26,7 @@ const DrawerIcons = (props) => {
       <Link className="drawer-list" to="/preferits">
         <ListItem button>
           <ListItemIcon>
-            <Badge badgeContent={props.favorites.length} className="drawer-badge">
+            <Badge badgeContent={props.favorites ? props.favorites.length : 0} className="drawer-badge">
               <FavoriteIcon className="drawer-icon"/>
             </Badge>
           </ListItemIcon>

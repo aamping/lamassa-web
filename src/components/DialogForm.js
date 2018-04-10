@@ -10,7 +10,15 @@ import Dialog, {
   withMobileDialog,
 } from 'material-ui/Dialog';
 
+import DialogCalendar from './DialogCalendar';
 import StepperCart from './StepperCart';
+
+const frequencies = {
+  1: 'Una sola vegada',
+  2: 'Cada Setmana',
+  3: 'Cada 2 Setmanes',
+  4: 'Cada 4 Setmanes',
+};
 
 const styles = {
   containerTextImg: {
@@ -26,6 +34,8 @@ class DialogForm extends Component {
   state = {
     open: false,
     entrega: '',
+    openDialogCalendar: false,
+    frequencia: '',
   };
 
   handleClickOpen = () => {
@@ -37,7 +47,6 @@ class DialogForm extends Component {
   };
 
   handleChange = name => event => {
-    console.log(event.target.value);
     this.setState({
       [name]: event.target.value,
     });
@@ -101,22 +110,39 @@ class DialogForm extends Component {
             </div>
             <img alt="" src="/item_espelta.jpg" style={styles.img} />
           </div>
-          <StepperCart data={entrega} submit={this.addCart} />
+          <StepperCart
+            data={selected}
+            submit={this.addCart.bind(this)}
+            onChangeFrequencia={value => this.setState({ frequencia: frequencies[value] })}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel·la
           </Button>
         </DialogActions>
+        <DialogCalendar
+          dies={selected.tipus.dies_stocks_futurs}
+          frequencia={this.state.frequencia}
+          open={this.state.openDialogCalendar}
+          handleClose={this.handleDialogCalendar}
+        />
       </Dialog>
     );
   }
-  addCart = entrega => {
+  handleDialogCalendar = () => {
+    this.setState({ openDialogCalendar: false });
+  };
+  addCart(entrega) {
     const { item, selected } = this.props;
     const comanda = { ...selected, ...entrega, preuTotal: selected.tipus.preu * selected.quantitat };
-    this.props.submitForm(item, comanda);
-    this.props.handleClose();
-  };
+    if (comanda.frequencia === 1) {
+      this.props.submitForm(item, comanda);
+      this.props.handleClose();
+    } else {
+      this.setState({ openDialogCalendar: true });
+    }
+  }
 }
 
 DialogForm.propTypes = {

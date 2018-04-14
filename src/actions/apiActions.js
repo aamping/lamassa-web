@@ -16,7 +16,7 @@ export const REVIEW_PRODUCT = '@@api/REVIEW_PRODUCT';
 
 export const fetchList = () => ({
   [RSAA]: {
-    endpoint: 'http://aamping.pythonanywhere.com/api/auth/list',
+    endpoint: 'http://localhost:8000/api/auth/list',
     method: 'GET',
     headers: withAuth({ 'Content-Type': 'application/json' }),
     types: [
@@ -27,7 +27,7 @@ export const fetchList = () => ({
 
 export const fetchProduct = ({ term }) => ({
   [RSAA]: {
-    endpoint: 'http://aamping.pythonanywhere.com/api/auth/list',
+    endpoint: 'http://localhost:8000/api/auth/list',
     method: 'GET',
     headers: withAuth({ 'Content-Type': 'application/json' }),
     types: [
@@ -44,7 +44,7 @@ export const fetchProduct = ({ term }) => ({
 
 export const addRemoveItem = () => ({
   [RSAA]: {
-    endpoint: 'http://aamping.pythonanywhere.com/api/auth/example',
+    endpoint: 'http://localhost:8000/api/auth/example',
     method: 'POST',
     headers: withAuth({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({

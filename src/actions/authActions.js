@@ -11,7 +11,7 @@ export const TOKEN_FAILURE = '@@auth/TOKEN_FAILURE';
 
 export const login = (username, password) => ({
   [RSAA]: {
-    endpoint: 'http://aamping.pythonanywhere.com/api/auth/token/obtain/',
+    endpoint: 'http://localhost:8000/api/auth/token/obtain/',
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: { 'Content-Type': 'application/json' },
@@ -23,7 +23,7 @@ export const login = (username, password) => ({
 
 export const refreshAccessToken = token => ({
   [RSAA]: {
-    endpoint: 'http://aamping.pythonanywhere.com/api/auth/token/refresh/',
+    endpoint: 'http://localhost:8000/api/auth/token/refresh/',
     method: 'POST',
     body: JSON.stringify({ refresh: token }),
     headers: { 'Content-Type': 'application/json' },

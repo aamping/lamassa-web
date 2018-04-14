@@ -44,7 +44,7 @@ export const addFavorites = ({ favorites, itemPk }) => {
 export const postChanges = ({ prop, value }) => {
   return {
     [RSAA]: {
-      endpoint: 'http://aamping.pythonanywhere.com/api/auth/example',
+      endpoint: 'http://localhost:8000/api/auth/example',
       method: 'POST',
       headers: withAuth({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
